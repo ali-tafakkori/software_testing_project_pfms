@@ -13,7 +13,7 @@ class User {
     this.id,
     required this.username,
     required this.password,
-    required this.balance,
+    this.balance = 0,
     required this.name,
   });
 }
