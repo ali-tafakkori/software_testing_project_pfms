@@ -9,6 +9,6 @@ class Customer {
   Customer({
     this.id,
     required this.name,
-    required this.balance,
+    this.balance = 0,
   });
 }
