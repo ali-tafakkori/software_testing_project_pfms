@@ -74,6 +74,8 @@ class _$AppDatabase extends AppDatabase {
 
   UserDao? _userDaoInstance;
 
+  CustomerDao? _customerDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -97,6 +99,8 @@ class _$AppDatabase extends AppDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `User` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` TEXT NOT NULL, `password` TEXT NOT NULL, `balance` INTEGER NOT NULL, `name` TEXT NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Customer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -107,6 +111,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   UserDao get userDao {
     return _userDaoInstance ??= _$UserDao(database, changeListener);
+  }
+
+  @override
+  CustomerDao get customerDao {
+    return _customerDaoInstance ??= _$CustomerDao(database, changeListener);
   }
 }
 
@@ -170,5 +179,62 @@ class _$UserDao extends UserDao {
   @override
   Future<void> delete(User user) async {
     await _userDeletionAdapter.delete(user);
+  }
+}
+
+class _$CustomerDao extends CustomerDao {
+  _$CustomerDao(
+    this.database,
+    this.changeListener,
+  )   : _customerInsertionAdapter = InsertionAdapter(
+            database,
+            'Customer',
+            (Customer item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'balance': item.balance
+                }),
+        _customerUpdateAdapter = UpdateAdapter(
+            database,
+            'Customer',
+            ['id'],
+            (Customer item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'balance': item.balance
+                }),
+        _customerDeletionAdapter = DeletionAdapter(
+            database,
+            'Customer',
+            ['id'],
+            (Customer item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'balance': item.balance
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final InsertionAdapter<Customer> _customerInsertionAdapter;
+
+  final UpdateAdapter<Customer> _customerUpdateAdapter;
+
+  final DeletionAdapter<Customer> _customerDeletionAdapter;
+
+  @override
+  Future<void> insert(Customer customer) async {
+    await _customerInsertionAdapter.insert(customer, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> update(Customer customer) async {
+    await _customerUpdateAdapter.update(customer, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> delete(Customer customer) async {
+    await _customerDeletionAdapter.delete(customer);
   }
 }
