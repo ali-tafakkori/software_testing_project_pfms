@@ -60,6 +60,7 @@ class AppTextField extends StatefulWidget {
   final Color focusedBorderColor;
   final bool noBorder;
   final ValueChanged<String>? onChanged;
+  final GestureTapCallback? onTap;
   final VoidCallback? onEditingComplete;
   final bool readOnly;
   final Color cursorColor;
@@ -88,6 +89,7 @@ class AppTextField extends StatefulWidget {
     this.focusedBorderColor = Colors.black,
     this.noBorder = false,
     this.onChanged,
+    this.onTap,
     this.readOnly = false,
     this.cursorColor = Colors.black,
     this.prefixIcon,
@@ -123,6 +125,7 @@ class _AppTextFieldState extends State<AppTextField> {
         keyboardType: widget.inputType,
         readOnly: widget.readOnly,
         onChanged: widget.onChanged,
+        onTap: widget.onTap,
         inputFormatters: [
           if (widget.maxLength != null)
             LengthLimitingTextInputFormatter(widget.maxLength),
