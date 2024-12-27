@@ -26,10 +26,11 @@ android {
     namespace "tafakkori.ali.software_testing_project_pfms"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
+    buildToolsVersion "35.0.0"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
