@@ -9,8 +9,11 @@ abstract class UserDao {
   @floor.update
   Future<void> update(User user);
 
-  @floor.Query('SELECT * FROM user WHERE username = :user AND password = :pass')
-  Future<User?> findByUserAndPass(String user, String pass);
+  @floor.Query('SELECT * FROM user WHERE username = :username AND password = :password')
+  Future<User?> findByUsernameAndPassword(String username, String password);
+
+  @floor.Query('SELECT * FROM user WHERE username = :username')
+  Future<User?> findByUsername(String username);
 
   @floor.delete
   Future<void> delete(User user);

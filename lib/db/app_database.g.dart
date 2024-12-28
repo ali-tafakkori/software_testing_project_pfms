@@ -170,9 +170,9 @@ class _$UserDao extends UserDao {
   final DeletionAdapter<User> _userDeletionAdapter;
 
   @override
-  Future<User?> findByUserAndPass(
-    String user,
-    String pass,
+  Future<User?> findByUsernameAndPassword(
+    String username,
+    String password,
   ) async {
     return _queryAdapter.query(
         'SELECT * FROM user WHERE username = ?1 AND password = ?2',
@@ -182,7 +182,19 @@ class _$UserDao extends UserDao {
             password: row['password'] as String,
             balance: row['balance'] as int,
             name: row['name'] as String),
-        arguments: [user, pass]);
+        arguments: [username, password]);
+  }
+
+  @override
+  Future<User?> findByUsername(String username) async {
+    return _queryAdapter.query('SELECT * FROM user WHERE username = ?1',
+        mapper: (Map<String, Object?> row) => User(
+            id: row['id'] as int?,
+            username: row['username'] as String,
+            password: row['password'] as String,
+            balance: row['balance'] as int,
+            name: row['name'] as String),
+        arguments: [username]);
   }
 
   @override
