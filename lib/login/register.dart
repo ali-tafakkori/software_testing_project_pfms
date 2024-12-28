@@ -251,7 +251,7 @@ class _RegisterState extends State<Register> {
           name: name,
         ));
         if (mounted) {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(true);
         }
       } else {
         hasFocus = true;
