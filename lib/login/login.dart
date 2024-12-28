@@ -20,6 +20,7 @@ class _LoginState extends State<Login> {
   final _atfcUser = AppTextFieldController();
   final _atfcPass = AppTextFieldController();
 
+  bool obscurePass = true;
   bool hasFocus = false;
   String? warning;
 
@@ -72,7 +73,9 @@ class _LoginState extends State<Login> {
                       noBorder: true,
                       width: double.infinity,
                       onChanged: (value) {
-                        setState(() {});
+                        setState(() {
+                          warning = null;
+                        });
                       },
                       onTap: () {
                         setState(() {
@@ -85,13 +88,31 @@ class _LoginState extends State<Login> {
                       color: Colors.black26,
                     ),
                     AppTextField(
+                      obscure: obscurePass,
                       controller: _atfcPass,
                       inputType: TextInputType.text,
                       noBorder: true,
                       hintText: "Password",
                       width: double.infinity,
+                      suffixIcon: _atfcPass.text.isNotEmpty
+                          ? IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  obscurePass = !obscurePass;
+                                });
+                              },
+                              icon: Icon(
+                                obscurePass
+                                    ? CupertinoIcons.eye
+                                    : CupertinoIcons.eye_slash,
+                                color: Colors.amber,
+                              ),
+                            )
+                          : null,
                       onChanged: (value) {
-                        setState(() {});
+                        setState(() {
+                          warning = null;
+                        });
                       },
                       onTap: () {
                         setState(() {
@@ -106,7 +127,7 @@ class _LoginState extends State<Login> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
+                    horizontal: 10,
                     vertical: 8,
                   ),
                   child: Text(
@@ -122,8 +143,10 @@ class _LoginState extends State<Login> {
               ),
               AppProgressButton(
                 text: "Login",
-                onPressed: onLoginPressed(),
+                onPressed: onLoginPressed,
                 state: state,
+                color:
+                    _atfcUser.text.isNotEmpty ? Colors.amber : Colors.blueGrey,
               ),
               const SizedBox(
                 height: 14,
@@ -141,28 +164,33 @@ class _LoginState extends State<Login> {
     );
   }
 
-  VoidCallback? onLoginPressed() {
+  void onLoginPressed() async {
     var username = _atfcUser.text.trim();
     var pass = _atfcPass.text.trim();
-    if (username.isNotEmpty) {
-      return () async {
-        setState(() {
-          state = AppProgressButtonState.loading;
-          warning = null;
-        });
-        User? user = await AppDatabase.instance.userDao
-            .findByUserAndPass(username, pass);
-        if (user != null) {
-        } else {
-          hasFocus = true;
-          warning = "The information entered is incorrect.";
-        }
-        setState(() {
-          state = AppProgressButtonState.idle;
-        });
-      };
+    if (username.isEmpty && pass.isEmpty) {
+      hasFocus = true;
+      warning = "Username and Password are required.";
+    } else if (username.isEmpty) {
+      hasFocus = true;
+      warning = "Username is required.";
+    } else if (pass.isEmpty) {
+      hasFocus = true;
+      warning = "Password is required.";
+    } else {
+      setState(() {
+        state = AppProgressButtonState.loading;
+        warning = null;
+      });
+      User? user =
+          await AppDatabase.instance.userDao.findByUserAndPass(username, pass);
+      if (user != null) {
+      } else {
+        hasFocus = true;
+        warning = "The information entered is incorrect.";
+      }
+      state = AppProgressButtonState.idle;
     }
-    return null;
+    setState(() {});
   }
 
   void onRegisterPressed() {
