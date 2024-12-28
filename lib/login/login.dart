@@ -112,7 +112,16 @@ class _LoginState extends State<Login> {
               ),
               AppButton(
                 text: "Login",
-                onPressed: onPressed(),
+                onPressed: onLoginPressed(),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+              AppButton(
+                text: "Register",
+                onPressed: onRegisterPressed,
+                color: Colors.transparent,
+                textColor: Colors.amber,
               ),
             ],
           ),
@@ -121,12 +130,16 @@ class _LoginState extends State<Login> {
     );
   }
 
-  VoidCallback? onPressed() {
+  VoidCallback? onLoginPressed() {
     var user = _atfcUser.text.trim();
     var pass = _atfcPass.text.trim();
     if (user.isNotEmpty) {
       return () {};
     }
     return null;
+  }
+
+  void onRegisterPressed() {
+
   }
 }
