@@ -189,6 +189,9 @@ class _LoginState extends State<Login> {
       User? user = await AppDatabase.instance.userDao
           .findByUsernameAndPassword(username, password);
       if (user != null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        }
       } else {
         hasFocus = true;
         warning = "The information entered is incorrect.";
@@ -199,6 +202,25 @@ class _LoginState extends State<Login> {
   }
 
   void onRegisterPressed() {
-    Navigator.of(context).pushNamed(Routes.register.toString());
+    Navigator.of(context).pushNamed<bool?>(Routes.register.toString()).then(
+      (value) {
+        if (value == true) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
+              content: const Text("Now you can log in."),
+              leading: const Icon(CupertinoIcons.info),
+              actions: [
+                TextButton(
+                  child: const Text('Dismiss'),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+                  },
+                ),
+              ],
+            ));
+          }
+        }
+      },
+    );
   }
 }
