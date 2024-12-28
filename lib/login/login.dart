@@ -167,15 +167,20 @@ class _LoginState extends State<Login> {
   void onLoginPressed() async {
     var username = _atfcUser.text.trim();
     var pass = _atfcPass.text.trim();
+    FocusScope.of(context).children.forEach((FocusNode f) {
+      f.unfocus();
+    });
     if (username.isEmpty && pass.isEmpty) {
       hasFocus = true;
       warning = "Username and Password are required.";
     } else if (username.isEmpty) {
       hasFocus = true;
       warning = "Username is required.";
+      _atfcUser.requestFocus(context);
     } else if (pass.isEmpty) {
       hasFocus = true;
       warning = "Password is required.";
+      _atfcPass.requestFocus(context);
     } else {
       setState(() {
         state = AppProgressButtonState.loading;
