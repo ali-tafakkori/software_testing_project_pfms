@@ -19,7 +19,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       },
     );
   } else if (settings.name == Routes.register.toString()) {
-    return CupertinoPageRoute(
+    return CupertinoPageRoute<bool?>(
       builder: (context) {
         return const Register();
       },
