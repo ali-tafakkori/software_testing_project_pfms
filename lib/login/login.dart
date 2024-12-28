@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Icon(
-                CupertinoIcons.person_fill,
+                CupertinoIcons.person,
                 color: Colors.amber,
                 size: 90,
               ),
@@ -55,7 +55,11 @@ class _LoginState extends State<Login> {
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.black.withAlpha(5),
                   border: Border.all(
-                    color: hasFocus ? Colors.amber : Colors.transparent,
+                    color: hasFocus
+                        ? warning != null
+                            ? Colors.redAccent
+                            : Colors.amber
+                        : Colors.transparent,
                     width: 2,
                   ),
                 ),
@@ -138,14 +142,21 @@ class _LoginState extends State<Login> {
   }
 
   VoidCallback? onLoginPressed() {
-    var user = _atfcUser.text.trim();
+    var username = _atfcUser.text.trim();
     var pass = _atfcPass.text.trim();
-    if (user.isNotEmpty) {
+    if (username.isNotEmpty) {
       return () async {
         setState(() {
           state = AppProgressButtonState.loading;
+          warning = null;
         });
-        User? userAccent = await AppDatabase.instance.userDao.findByUserAndPass(user, pass);
+        User? user = await AppDatabase.instance.userDao
+            .findByUserAndPass(username, pass);
+        if (user != null) {
+        } else {
+          hasFocus = true;
+          warning = "The information entered is incorrect.";
+        }
         setState(() {
           state = AppProgressButtonState.idle;
         });
