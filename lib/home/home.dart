@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:software_testing_project_pfms/home/dashboard.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -21,6 +22,7 @@ class _HomeState extends State<Home> {
     ));
     return Scaffold(
       body: <Widget>[
+        const Dashboard(),
         Card(
           shadowColor: Colors.transparent,
           margin: const EdgeInsets.all(8.0),
