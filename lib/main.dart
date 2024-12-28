@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'router.dart' as router;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  AppDatabase.init();
   runApp(const MyApp());
 }
 
