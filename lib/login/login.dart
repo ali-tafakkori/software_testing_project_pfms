@@ -191,6 +191,7 @@ class _LoginState extends State<Login> {
       if (user != null) {
         if (mounted) {
           ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+          Navigator.of(context).pushReplacementNamed(Routes.home.toString());
         }
       } else {
         hasFocus = true;
