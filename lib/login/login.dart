@@ -2,7 +2,11 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:software_testing_project_pfms/db/app_database.dart';
+import 'package:software_testing_project_pfms/models/user.dart';
+import 'package:software_testing_project_pfms/router.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
+import 'package:software_testing_project_pfms/widgets/app_progress_button.dart';
 import 'package:software_testing_project_pfms/widgets/app_text_field.dart';
 
 class Login extends StatefulWidget {
@@ -18,6 +22,8 @@ class _LoginState extends State<Login> {
 
   bool hasFocus = false;
   String? warning;
+
+  AppProgressButtonState state = AppProgressButtonState.idle;
 
   @override
   Widget build(BuildContext context) {
@@ -110,9 +116,10 @@ class _LoginState extends State<Login> {
               const SizedBox(
                 height: 40,
               ),
-              AppButton(
+              AppProgressButton(
                 text: "Login",
                 onPressed: onLoginPressed(),
+                state: state,
               ),
               const SizedBox(
                 height: 14,
@@ -134,12 +141,20 @@ class _LoginState extends State<Login> {
     var user = _atfcUser.text.trim();
     var pass = _atfcPass.text.trim();
     if (user.isNotEmpty) {
-      return () {};
+      return () async {
+        setState(() {
+          state = AppProgressButtonState.loading;
+        });
+        User? userAccent = await AppDatabase.instance.userDao.findByUserAndPass(user, pass);
+        setState(() {
+          state = AppProgressButtonState.idle;
+        });
+      };
     }
     return null;
   }
 
   void onRegisterPressed() {
-
+    Navigator.of(context).pushNamed(Routes.register.toString());
   }
 }
