@@ -123,7 +123,8 @@ class _$UserDao extends UserDao {
   _$UserDao(
     this.database,
     this.changeListener,
-  )   : _userInsertionAdapter = InsertionAdapter(
+  )   : _queryAdapter = QueryAdapter(database),
+        _userInsertionAdapter = InsertionAdapter(
             database,
             'User',
             (User item) => <String, Object?>{
@@ -160,11 +161,29 @@ class _$UserDao extends UserDao {
 
   final StreamController<String> changeListener;
 
+  final QueryAdapter _queryAdapter;
+
   final InsertionAdapter<User> _userInsertionAdapter;
 
   final UpdateAdapter<User> _userUpdateAdapter;
 
   final DeletionAdapter<User> _userDeletionAdapter;
+
+  @override
+  Future<User?> findByUserAndPass(
+    String user,
+    String pass,
+  ) async {
+    return _queryAdapter.query(
+        'SELECT * FROM user WHERE username = ?1 AND password = ?2',
+        mapper: (Map<String, Object?> row) => User(
+            id: row['id'] as int?,
+            username: row['username'] as String,
+            password: row['password'] as String,
+            balance: row['balance'] as int,
+            name: row['name'] as String),
+        arguments: [user, pass]);
+  }
 
   @override
   Future<void> insert(User user) async {
