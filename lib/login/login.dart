@@ -173,11 +173,11 @@ class _LoginState extends State<Login> {
     if (username.isEmpty && password.isEmpty) {
       hasFocus = true;
       warning = "Username and Password are required.";
-    } else if (username.isEmpty) {
+    } else if (username.length < 3) {
       hasFocus = true;
       warning = "Username is required.";
       _atfcUser.requestFocus(context);
-    } else if (password.isEmpty) {
+    } else if (password.length < 5) {
       hasFocus = true;
       warning = "Password is required.";
       _atfcPass.requestFocus(context);
