@@ -166,18 +166,18 @@ class _LoginState extends State<Login> {
 
   void onLoginPressed() async {
     var username = _atfcUser.text.trim();
-    var pass = _atfcPass.text.trim();
+    var password = _atfcPass.text.trim();
     FocusScope.of(context).children.forEach((FocusNode f) {
       f.unfocus();
     });
-    if (username.isEmpty && pass.isEmpty) {
+    if (username.isEmpty && password.isEmpty) {
       hasFocus = true;
       warning = "Username and Password are required.";
     } else if (username.isEmpty) {
       hasFocus = true;
       warning = "Username is required.";
       _atfcUser.requestFocus(context);
-    } else if (pass.isEmpty) {
+    } else if (password.isEmpty) {
       hasFocus = true;
       warning = "Password is required.";
       _atfcPass.requestFocus(context);
@@ -186,8 +186,8 @@ class _LoginState extends State<Login> {
         state = AppProgressButtonState.loading;
         warning = null;
       });
-      User? user =
-          await AppDatabase.instance.userDao.findByUserAndPass(username, pass);
+      User? user = await AppDatabase.instance.userDao
+          .findByUsernameAndPassword(username, password);
       if (user != null) {
       } else {
         hasFocus = true;
