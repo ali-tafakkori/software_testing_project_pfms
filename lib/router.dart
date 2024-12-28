@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:software_testing_project_pfms/home.dart';
-import 'package:software_testing_project_pfms/login.dart';
-import 'package:software_testing_project_pfms/register.dart';
+import 'package:software_testing_project_pfms/login/login.dart';
+import 'package:software_testing_project_pfms/login/register.dart';
 
 enum Routes {
   login,
