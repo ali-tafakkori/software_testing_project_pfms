@@ -222,15 +222,15 @@ class _RegisterState extends State<Register> {
     FocusScope.of(context).children.forEach((FocusNode f) {
       f.unfocus();
     });
-    if (name.isEmpty) {
+    if (name.length < 3) {
       hasFocus = true;
       warning = "Name is required.";
       _atfcName.requestFocus(context);
-    } else if (username.isEmpty) {
+    } else if (username.length < 3) {
       hasFocus = true;
       warning = "Username is required.";
       _atfcUser.requestFocus(context);
-    } else if (password.isEmpty) {
+    } else if (password.length < 5) {
       hasFocus = true;
       warning = "Password is required.";
       _atfcPass.requestFocus(context);
@@ -243,12 +243,19 @@ class _RegisterState extends State<Register> {
         state = AppProgressButtonState.loading;
         warning = null;
       });
-      User? user =
-          await AppDatabase.instance.userDao.findByUsername(username);
-      if (user != null) {
+      User? user = await AppDatabase.instance.userDao.findByUsername(username);
+      if (user == null) {
+        await AppDatabase.instance.userDao.insert(User(
+          username: username,
+          password: password,
+          name: name,
+        ));
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
       } else {
         hasFocus = true;
-        warning = "The information entered is incorrect.";
+        warning = "The Username is already occupied.";
       }
       state = AppProgressButtonState.idle;
     }
