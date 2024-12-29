@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:software_testing_project_pfms/home/customers.dart';
 import 'package:software_testing_project_pfms/home/dashboard.dart';
 
 class Home extends StatefulWidget {
@@ -23,6 +24,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: <Widget>[
         const Dashboard(),
+        const Customers(),
         Card(
           shadowColor: Colors.transparent,
           margin: const EdgeInsets.all(8.0),
@@ -33,29 +35,6 @@ class _HomeState extends State<Home> {
                 style: theme.textTheme.titleLarge,
               ),
             ),
-          ),
-        ),
-
-        /// Notifications page
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-            ],
           ),
         ),
 
@@ -111,15 +90,19 @@ class _HomeState extends State<Home> {
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            icon: Icon(Icons.dashboard_outlined),
+            icon: Icon(CupertinoIcons.home),
             label: 'Dashboard',
           ),
           NavigationDestination(
-            icon: Icon(Icons.report_gmailerrorred),
+            icon: Icon(CupertinoIcons.person_2),
+            label: 'Customers',
+          ),
+          NavigationDestination(
+            icon: Icon(CupertinoIcons.square_list),
             label: 'Reports',
           ),
           NavigationDestination(
-            icon: Icon(Icons.inventory_outlined),
+            icon: Icon(CupertinoIcons.list_bullet_below_rectangle),
             label: 'Invoices',
           ),
         ],
