@@ -15,4 +15,7 @@ abstract class CustomerDao {
 
   @floor.Query('DELETE FROM customer WHERE id = :id')
   Future<void> deleteById(int id);
+
+  @floor.Query('SELECT COUNT(*) FROM customer')
+  Future<int?> count();
 }
