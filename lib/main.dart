@@ -9,8 +9,18 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => MyAppState();
+
+  static MyAppState? of(BuildContext context) =>
+      context.findAncestorStateOfType<MyAppState>();
+}
+
+class MyAppState extends State<MyApp> {
+  int? userId;
 
   @override
   Widget build(BuildContext context) {
