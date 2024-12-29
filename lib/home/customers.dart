@@ -216,29 +216,47 @@ class _CustomersState extends State<Customers> {
                       return Card(
                         child: ListTile(
                           leading: const Icon(
-                            Icons.person_outlined,
+                            Icons.person,
                             color: Colors.amber,
+                            size: 30,
                           ),
                           title: Text(customer.name),
                           subtitle: Text(
                             customer.balance.toString(),
                           ),
-                          trailing: IconButton(
-                            onPressed: () {
-                              CustomerDialog.show(
-                                context,
-                                customer,
-                              ).then(
-                                (value) async {
-                                  if (value != null) {
-                                    await AppDatabase.instance.customerDao
-                                        .update(value);
-                                    setState(() {});
-                                  }
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  CustomerDialog.show(
+                                    context,
+                                    customer,
+                                  ).then(
+                                    (value) async {
+                                      if (value != null) {
+                                        await AppDatabase.instance.customerDao
+                                            .update(value);
+                                        setState(() {});
+                                      }
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                            icon: const Icon(Icons.edit_outlined),
+                                icon: const Icon(
+                                  Icons.edit_outlined,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () async {
+                                  await AppDatabase.instance.customerDao
+                                      .deleteById(customer.id!);
+                                  setState(() {});
+                                },
+                                icon: const Icon(
+                                  Icons.delete_outline,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
