@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:software_testing_project_pfms/db/app_database.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -51,14 +53,25 @@ class _DashboardState extends State<Dashboard> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Center(
-                            child: Text(
-                              "0",
-                              style: TextStyle(
-                                color: Colors.amber,
-                                fontSize: 32,
-                                fontWeight: FontWeight.w900,
-                              ),
+                          child: Center(
+                            child: FutureBuilder(
+                              future: AppDatabase.instance.userDao.count(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return  Text(
+                                    snapshot.data.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 27,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  );
+                                }
+                                return LoadingAnimationWidget.inkDrop(
+                                  color: Colors.white,
+                                  size: 10,
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -66,7 +79,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 8,
                         ),
                         const Text(
-                          "Users",
+                          "Customer",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
@@ -85,10 +98,10 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: const Center(
                             child: Text(
-                              "0\$",
+                              "10K",
                               style: TextStyle(
-                                color: Colors.amber,
-                                fontSize: 32,
+                                color: Colors.green,
+                                fontSize: 27,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -98,7 +111,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 8,
                         ),
                         const Text(
-                          "Users",
+                          "Debt",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
@@ -109,22 +122,28 @@ class _DashboardState extends State<Dashboard> {
                     Column(
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(20),
+                          width: 70,
+                          height: 70,
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Icon(
-                            CupertinoIcons.person_2,
-                            color: Colors.amber,
-                            size: 32,
+                          child: const Center(
+                            child: Text(
+                              "0",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 27,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(
                           height: 8,
                         ),
                         const Text(
-                          "Users",
+                          "Profit",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
