@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
+import 'package:software_testing_project_pfms/main.dart';
+import 'package:software_testing_project_pfms/models/user.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -26,15 +28,27 @@ class _DashboardState extends State<Dashboard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
+                Expanded(
                   child: Center(
-                    child: Text(
-                      "Hi Ali!",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 32,
-                        fontWeight: FontWeight.w900,
-                      ),
+                    child: FutureBuilder<User?>(
+                      future: AppDatabase.instance.userDao
+                          .findById(MyApp.of(context)!.userId!),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            "Hi ${snapshot.data?.name}!",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 32,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          );
+                        }
+                        return LoadingAnimationWidget.newtonCradle(
+                          color: Colors.white,
+                          size: 200,
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -50,7 +64,7 @@ class _DashboardState extends State<Dashboard> {
                           width: 70,
                           height: 70,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.white.withAlpha(125),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: Center(
@@ -58,7 +72,7 @@ class _DashboardState extends State<Dashboard> {
                               future: AppDatabase.instance.userDao.count(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  return  Text(
+                                  return Text(
                                     snapshot.data.toString(),
                                     style: const TextStyle(
                                       color: Colors.black,
@@ -68,8 +82,8 @@ class _DashboardState extends State<Dashboard> {
                                   );
                                 }
                                 return LoadingAnimationWidget.inkDrop(
-                                  color: Colors.white,
-                                  size: 10,
+                                  color: Colors.black,
+                                  size: 30,
                                 );
                               },
                             ),
@@ -83,6 +97,7 @@ class _DashboardState extends State<Dashboard> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
@@ -93,7 +108,7 @@ class _DashboardState extends State<Dashboard> {
                           width: 70,
                           height: 70,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.white.withAlpha(125),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Center(
@@ -115,6 +130,7 @@ class _DashboardState extends State<Dashboard> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
@@ -125,7 +141,7 @@ class _DashboardState extends State<Dashboard> {
                           width: 70,
                           height: 70,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.white.withAlpha(125),
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: const Center(
@@ -147,6 +163,7 @@ class _DashboardState extends State<Dashboard> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
