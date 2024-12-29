@@ -69,7 +69,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: Center(
                             child: FutureBuilder(
-                              future: AppDatabase.instance.userDao.count(),
+                              future: AppDatabase.instance.customerDao.count(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Text(
