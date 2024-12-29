@@ -286,7 +286,7 @@ class _$CustomerDao extends CustomerDao {
   @override
   Future<void> deleteById(int id) async {
     await _queryAdapter
-        .queryNoReturn('DELETE * FROM customer WHERE id = ?1', arguments: [id]);
+        .queryNoReturn('DELETE FROM customer WHERE id = ?1', arguments: [id]);
   }
 
   @override

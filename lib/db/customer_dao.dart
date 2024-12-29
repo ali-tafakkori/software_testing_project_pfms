@@ -13,6 +13,6 @@ abstract class CustomerDao {
   @floor.update
   Future<void> update(Customer customer);
 
-  @floor.Query('DELETE * FROM customer WHERE id = :id')
+  @floor.Query('DELETE FROM customer WHERE id = :id')
   Future<void> deleteById(int id);
 }
