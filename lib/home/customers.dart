@@ -222,7 +222,7 @@ class _CustomersState extends State<Customers> {
                           ),
                           title: Text(customer.name),
                           subtitle: Text(
-                            "${customer.balance >= 0 ? "+" : ""} ${customer.balance.toString()} \$",
+                            "${customer.balance > 0 ? "+" : ""} ${customer.balance.toString()} \$",
                             style: TextStyle(
                               color: customer.balance >= 0
                                   ? customer.balance == 0
