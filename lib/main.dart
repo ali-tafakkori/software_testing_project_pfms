@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'router.dart' as router;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  AppDatabase.init();
+  await AppDatabase.init();
   runApp(const MyApp());
 }
 
