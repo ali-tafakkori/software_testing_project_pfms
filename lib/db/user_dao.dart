@@ -15,6 +15,9 @@ abstract class UserDao {
   @floor.Query('SELECT * FROM user WHERE username = :username')
   Future<User?> findByUsername(String username);
 
+  @floor.Query('SELECT * FROM user WHERE id = :id')
+  Future<User?> findById(int id);
+
   @floor.Query('SELECT COUNT(*) FROM user')
   Future<int?> count();
 
