@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
+import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/user.dart';
 import 'package:software_testing_project_pfms/router.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
@@ -190,6 +191,7 @@ class _LoginState extends State<Login> {
           .findByUsernameAndPassword(username, password);
       if (user != null) {
         if (mounted) {
+          MyApp.of(context)?.userId = user.id;
           ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
           Navigator.of(context).pushReplacementNamed(Routes.home.toString());
         }
