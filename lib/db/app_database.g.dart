@@ -198,6 +198,12 @@ class _$UserDao extends UserDao {
   }
 
   @override
+  Future<int?> count() async {
+    return _queryAdapter.query('SELECT COUNT(*) FROM user',
+        mapper: (Map<String, Object?> row) => row.values.first as int);
+  }
+
+  @override
   Future<void> insert(User user) async {
     await _userInsertionAdapter.insert(user, OnConflictStrategy.abort);
   }
