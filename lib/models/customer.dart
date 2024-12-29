@@ -6,8 +6,9 @@ class Customer {
   final int? id;
   final String name;
   final int balance;
-  Customer({
-    this.id,
+
+  const Customer({
+    this.id = -1,
     required this.name,
     this.balance = 0,
   });
