@@ -290,6 +290,12 @@ class _$CustomerDao extends CustomerDao {
   }
 
   @override
+  Future<int?> count() async {
+    return _queryAdapter.query('SELECT COUNT(*) FROM customer',
+        mapper: (Map<String, Object?> row) => row.values.first as int);
+  }
+
+  @override
   Future<void> insert(Customer customer) async {
     await _customerInsertionAdapter.insert(customer, OnConflictStrategy.abort);
   }
