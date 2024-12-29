@@ -198,6 +198,18 @@ class _$UserDao extends UserDao {
   }
 
   @override
+  Future<User?> findById(int id) async {
+    return _queryAdapter.query('SELECT * FROM user WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => User(
+            id: row['id'] as int?,
+            username: row['username'] as String,
+            password: row['password'] as String,
+            balance: row['balance'] as int,
+            name: row['name'] as String),
+        arguments: [id]);
+  }
+
+  @override
   Future<int?> count() async {
     return _queryAdapter.query('SELECT COUNT(*) FROM user',
         mapper: (Map<String, Object?> row) => row.values.first as int);
@@ -223,7 +235,8 @@ class _$CustomerDao extends CustomerDao {
   _$CustomerDao(
     this.database,
     this.changeListener,
-  )   : _customerInsertionAdapter = InsertionAdapter(
+  )   : _queryAdapter = QueryAdapter(database),
+        _customerInsertionAdapter = InsertionAdapter(
             database,
             'Customer',
             (Customer item) => <String, Object?>{
@@ -239,26 +252,42 @@ class _$CustomerDao extends CustomerDao {
                   'id': item.id,
                   'name': item.name,
                   'balance': item.balance
-                }),
-        _customerDeletionAdapter = DeletionAdapter(
-            database,
-            'Customer',
-            ['id'],
-            (Customer item) => <String, Object?>{
-                  'id': item.id,
-                  'name': item.name,
-                  'balance': item.balance
                 });
 
   final sqflite.DatabaseExecutor database;
 
   final StreamController<String> changeListener;
 
+  final QueryAdapter _queryAdapter;
+
   final InsertionAdapter<Customer> _customerInsertionAdapter;
 
   final UpdateAdapter<Customer> _customerUpdateAdapter;
 
-  final DeletionAdapter<Customer> _customerDeletionAdapter;
+  @override
+  Future<List<Customer>> findAll() async {
+    return _queryAdapter.queryList('SELECT * FROM customer',
+        mapper: (Map<String, Object?> row) => Customer(
+            id: row['id'] as int?,
+            name: row['name'] as String,
+            balance: row['balance'] as int));
+  }
+
+  @override
+  Future<Customer?> findById(int id) async {
+    return _queryAdapter.query('SELECT * FROM user WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => Customer(
+            id: row['id'] as int?,
+            name: row['name'] as String,
+            balance: row['balance'] as int),
+        arguments: [id]);
+  }
+
+  @override
+  Future<void> deleteById(int id) async {
+    await _queryAdapter
+        .queryNoReturn('DELETE * FROM customer WHERE id = ?1', arguments: [id]);
+  }
 
   @override
   Future<void> insert(Customer customer) async {
@@ -268,10 +297,5 @@ class _$CustomerDao extends CustomerDao {
   @override
   Future<void> update(Customer customer) async {
     await _customerUpdateAdapter.update(customer, OnConflictStrategy.abort);
-  }
-
-  @override
-  Future<void> delete(Customer customer) async {
-    await _customerDeletionAdapter.delete(customer);
   }
 }
