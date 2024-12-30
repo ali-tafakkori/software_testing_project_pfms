@@ -178,7 +178,6 @@ class _CustomerDialogState extends State<CustomerDialog> {
     } else if (negativeBalance) {
       intValue *= -1;
     }
-    print("b:" + intValue.toString());
     Navigator.of(context).pop(
       Customer(
         id: widget.customer?.id,
