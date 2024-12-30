@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -137,7 +139,7 @@ class _DashboardState extends State<Dashboard> {
                           child: Center(
                             child: FutureBuilder(
                               future: AppDatabase.instance.database.rawQuery(
-                                  "SELECT IFNULL(SUM(balance), 0) - IFNULL(SUM(amount), 0) - (IFNULL(SUM(amount), 0) * 0.1) AS profit FROM customer, invoice"),
+                                  "SELECT (IFNULL((SELECT SUM(balance) FROM customer), 0) - IFNULL((SELECT SUM(amount) FROM invoice), 0) - (IFNULL((SELECT SUM(amount) FROM invoice), 0) * 0.1)) AS profit"),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   var row =
@@ -152,13 +154,8 @@ class _DashboardState extends State<Dashboard> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Icon(
-                                        i >= 0
-                                            ? i == 0
-                                                ? Icons.balance
-                                                : Icons.trending_up
-                                            : Icons.trending_down,
+                                        Icons.monetization_on_outlined,
                                         color: color,
-                                        size: 30,
                                       ),
                                       Text(
                                         NumberFormat.compact().format(i),
@@ -219,11 +216,18 @@ class _DashboardState extends State<Dashboard> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Icon(
-                                        Icons.monetization_on_outlined,
+                                        i >= 0
+                                            ? i == 0
+                                            ? Icons.balance
+                                            : Icons.trending_up
+                                            : Icons.trending_down,
                                         color: color,
+                                        size: 30,
                                       ),
                                       Text(
-                                        NumberFormat.compact().format(i),
+                                        (i > 0 ? "+" : "") +
+                                            NumberFormat.compact()
+                                                .format(i.abs()),
                                         style: TextStyle(
                                           color: color,
                                           fontSize: 20,
