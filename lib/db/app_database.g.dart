@@ -76,6 +76,8 @@ class _$AppDatabase extends AppDatabase {
 
   CustomerDao? _customerDaoInstance;
 
+  InvoiceDao? _invoiceDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -101,6 +103,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `User` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` TEXT NOT NULL, `password` TEXT NOT NULL, `balance` INTEGER NOT NULL, `name` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Customer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -116,6 +120,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   CustomerDao get customerDao {
     return _customerDaoInstance ??= _$CustomerDao(database, changeListener);
+  }
+
+  @override
+  InvoiceDao get invoiceDao {
+    return _invoiceDaoInstance ??= _$InvoiceDao(database, changeListener);
   }
 }
 
@@ -305,3 +314,81 @@ class _$CustomerDao extends CustomerDao {
     await _customerUpdateAdapter.update(customer, OnConflictStrategy.abort);
   }
 }
+
+class _$InvoiceDao extends InvoiceDao {
+  _$InvoiceDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _invoiceInsertionAdapter = InsertionAdapter(
+            database,
+            'Invoice',
+            (Invoice item) => <String, Object?>{
+                  'id': item.id,
+                  'amount': item.amount,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                }),
+        _invoiceUpdateAdapter = UpdateAdapter(
+            database,
+            'Invoice',
+            ['id'],
+            (Invoice item) => <String, Object?>{
+                  'id': item.id,
+                  'amount': item.amount,
+                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Invoice> _invoiceInsertionAdapter;
+
+  final UpdateAdapter<Invoice> _invoiceUpdateAdapter;
+
+  @override
+  Future<List<Invoice>> findAll() async {
+    return _queryAdapter.queryList('SELECT * FROM invoice',
+        mapper: (Map<String, Object?> row) => Invoice(
+            id: row['id'] as int?,
+            amount: row['amount'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as String)));
+  }
+
+  @override
+  Future<Invoice?> findById(int id) async {
+    return _queryAdapter.query('SELECT * FROM invoice WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => Invoice(
+            id: row['id'] as int?,
+            amount: row['amount'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as String)),
+        arguments: [id]);
+  }
+
+  @override
+  Future<void> deleteById(int id) async {
+    await _queryAdapter
+        .queryNoReturn('DELETE FROM invoice WHERE id = ?1', arguments: [id]);
+  }
+
+  @override
+  Future<int?> count() async {
+    return _queryAdapter.query('SELECT COUNT(*) FROM invoice',
+        mapper: (Map<String, Object?> row) => row.values.first as int);
+  }
+
+  @override
+  Future<void> insert(Invoice invoice) async {
+    await _invoiceInsertionAdapter.insert(invoice, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> update(Invoice invoice) async {
+    await _invoiceUpdateAdapter.update(invoice, OnConflictStrategy.abort);
+  }
+}
+
+// ignore_for_file: unused_element
+final _dateTimeConverter = DateTimeConverter();
