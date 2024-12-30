@@ -230,7 +230,7 @@ class _DashboardState extends State<Dashboard> {
                                                 .format(i.abs()),
                                         style: TextStyle(
                                           color: color,
-                                          fontSize: 20,
+                                          fontSize: 17,
                                           fontWeight: FontWeight.w900,
                                         ),
                                       ),
