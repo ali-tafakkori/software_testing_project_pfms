@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -84,13 +83,25 @@ class _DashboardState extends State<Dashboard> {
                               future: AppDatabase.instance.customerDao.count(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  return Text(
-                                    snapshot.data.toString(),
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 27,
-                                      fontWeight: FontWeight.w900,
-                                    ),
+                                  int i = snapshot.data as int;
+                                  Color color =
+                                      i > 0 ? Colors.black : Colors.redAccent;
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.person_outline_rounded,
+                                        color: color,
+                                      ),
+                                      Text(
+                                        NumberFormat.compact().format(i),
+                                        style: TextStyle(
+                                          color: color,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ],
                                   );
                                 }
                                 return LoadingAnimationWidget.inkDrop(
@@ -132,6 +143,11 @@ class _DashboardState extends State<Dashboard> {
                                   var row =
                                       snapshot.data!.first.values.first ?? 0;
                                   double i = row as double;
+                                  Color color = i >= 0
+                                      ? i == 0
+                                          ? Colors.black
+                                          : Colors.green
+                                      : Colors.redAccent;
                                   return Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -141,21 +157,13 @@ class _DashboardState extends State<Dashboard> {
                                                 ? Icons.balance
                                                 : Icons.trending_up
                                             : Icons.trending_down,
-                                        color: i >= 0
-                                            ? i == 0
-                                                ? Colors.black
-                                                : Colors.green
-                                            : Colors.redAccent,
+                                        color: color,
                                         size: 30,
                                       ),
                                       Text(
                                         NumberFormat.compact().format(i),
                                         style: TextStyle(
-                                          color: i >= 0
-                                              ? i == 0
-                                                  ? Colors.black
-                                                  : Colors.green
-                                              : Colors.redAccent,
+                                          color: color,
                                           fontSize: 20,
                                           fontWeight: FontWeight.w900,
                                         ),
