@@ -7,6 +7,7 @@ class AppTextFieldController {
   late final FocusNode focusNode;
 
   AppTextFieldController({
+    TextEditingController? controller,
     String? text,
     String? debugLabel,
     FocusOnKeyCallback? onKey,
@@ -14,7 +15,7 @@ class AppTextFieldController {
     bool canRequestFocus = true,
     bool descendantsAreFocusable = true,
   }) {
-    controller = TextEditingController(text: text);
+    this.controller = controller ?? TextEditingController(text: text);
     focusNode = FocusNode(
       debugLabel: debugLabel,
       onKey: onKey,
@@ -41,7 +42,6 @@ class AppTextFieldController {
     controller.dispose();
     focusNode.dispose();
   }
-
 }
 
 class AppTextField extends StatefulWidget {
