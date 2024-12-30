@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
@@ -30,25 +31,36 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 Expanded(
                   child: Center(
-                    child: FutureBuilder<User?>(
-                      future: AppDatabase.instance.userDao
-                          .findById(MyApp.of(context)!.userId!),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                            "Hi ${snapshot.data?.name}!",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 32,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          );
-                        }
-                        return LoadingAnimationWidget.newtonCradle(
-                          color: Colors.white,
-                          size: 200,
-                        );
-                      },
+                    child: Container(
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: Colors.white60,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Center(
+                        widthFactor: 1,
+                        child: FutureBuilder<User?>(
+                          future: AppDatabase.instance.userDao
+                              .findById(MyApp.of(context)!.userId!),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                "Hi ${snapshot.data?.name}!",
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              );
+                            }
+                            return LoadingAnimationWidget.newtonCradle(
+                              color: Colors.black,
+                              size: 200,
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -105,20 +117,57 @@ class _DashboardState extends State<Dashboard> {
                     Column(
                       children: [
                         Container(
-                          width: 70,
-                          height: 70,
+                          width: 80,
+                          height: 80,
                           decoration: BoxDecoration(
                             color: Colors.white.withAlpha(125),
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Center(
-                            child: Text(
-                              "10K",
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 27,
-                                fontWeight: FontWeight.w900,
-                              ),
+                          child: Center(
+                            child: FutureBuilder(
+                              future: AppDatabase.instance.database.rawQuery(
+                                  "SELECT IFNULL(SUM(balance), 0) - IFNULL(SUM(amount), 0) - (IFNULL(SUM(amount), 0) * 0.1) AS profit FROM customer, invoice"),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  var row =
+                                      snapshot.data!.first.values.first ?? 0;
+                                  double i = row as double;
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        i >= 0
+                                            ? i == 0
+                                                ? Icons.balance
+                                                : Icons.trending_up
+                                            : Icons.trending_down,
+                                        color: i >= 0
+                                            ? i == 0
+                                                ? Colors.black
+                                                : Colors.green
+                                            : Colors.redAccent,
+                                        size: 30,
+                                      ),
+                                      Text(
+                                        NumberFormat.compact().format(i),
+                                        style: TextStyle(
+                                          color: i >= 0
+                                              ? i == 0
+                                                  ? Colors.black
+                                                  : Colors.green
+                                              : Colors.redAccent,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return LoadingAnimationWidget.inkDrop(
+                                  color: Colors.black,
+                                  size: 30,
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -126,7 +175,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 8,
                         ),
                         const Text(
-                          "Debt",
+                          "Profit",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
@@ -144,14 +193,43 @@ class _DashboardState extends State<Dashboard> {
                             color: Colors.white.withAlpha(125),
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Center(
-                            child: Text(
-                              "0",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 27,
-                                fontWeight: FontWeight.w900,
-                              ),
+                          child: Center(
+                            child: FutureBuilder(
+                              future: AppDatabase.instance.database.rawQuery(
+                                  "SELECT (IFNULL((SELECT SUM(balance) FROM customer), 0) - IFNULL((SELECT SUM(amount) FROM invoice), 0)) AS difference"),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  var row =
+                                      snapshot.data!.first.values.first ?? 0;
+                                  int i = row as int;
+                                  Color color = i >= 0
+                                      ? i == 0
+                                          ? Colors.black
+                                          : Colors.green
+                                      : Colors.redAccent;
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.monetization_on_outlined,
+                                        color: color,
+                                      ),
+                                      Text(
+                                        NumberFormat.compact().format(i),
+                                        style: TextStyle(
+                                          color: color,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return LoadingAnimationWidget.inkDrop(
+                                  color: Colors.black,
+                                  size: 30,
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -159,7 +237,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 8,
                         ),
                         const Text(
-                          "Profit",
+                          "Debt",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
