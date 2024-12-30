@@ -40,10 +40,13 @@ class _CustomerDialogState extends State<CustomerDialog> {
     thousandSymbol: ",",
     numberOfDecimals: 0,
     currencySymbol: "\$",
+    enableNegative: false,
   );
   late final _atfcBalance = AppTextFieldController(
     controller: _cBalance,
   );
+
+  late bool negativeBalance = (widget.customer?.balance ?? 0) < 0;
 
   bool obscurePass = true;
   bool hasFocus = false;
@@ -113,6 +116,18 @@ class _CustomerDialogState extends State<CustomerDialog> {
                     noBorder: true,
                     hintText: "Balance (Default: Zero)",
                     width: double.infinity,
+                    prefixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          negativeBalance = !negativeBalance;
+                        });
+                      },
+                      icon: Icon(
+                        negativeBalance
+                            ? Icons.remove_circle_outline_rounded
+                            : Icons.add_circle_outline_rounded,
+                      ),
+                    ),
                     onChanged: (value) {
                       setState(() {
                         warning = null;
@@ -157,14 +172,18 @@ class _CustomerDialogState extends State<CustomerDialog> {
   }
 
   void onSavePressed() {
+    int intValue = _cBalance.intValue;
     if (_atfcBalance.text.trim().isEmpty) {
       _atfcBalance.text = "0";
+    } else if (negativeBalance) {
+      intValue *= -1;
     }
+    print("b:" + intValue.toString());
     Navigator.of(context).pop(
       Customer(
         id: widget.customer?.id,
         name: _atfcName.text.trim(),
-        balance: _cBalance.intValue,
+        balance: intValue,
       ),
     );
   }
