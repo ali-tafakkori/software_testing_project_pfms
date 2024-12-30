@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:floor/floor.dart';
+import 'package:software_testing_project_pfms/db/converters/date_time_converter.dart';
 import 'package:software_testing_project_pfms/db/customer_dao.dart';
 import 'package:software_testing_project_pfms/db/invoice_dao.dart';
 import 'package:software_testing_project_pfms/db/user_dao.dart';
@@ -11,6 +12,9 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 part 'app_database.g.dart';
 
+@TypeConverters([
+  DateTimeConverter,
+])
 @Database(version: 1, entities: [
   User,
   Customer,
