@@ -100,15 +100,14 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                     noBorder: true,
                     width: double.infinity,
                     readOnly: true,
-                    onTap: () {
-                      setState(() {
-                        hasFocus = true;
-                      });
-                    },
+                    onTap: onDateTimeTap,
                     prefixIcon: IconButton(
                       onPressed: () {
-                        _atfcDateTime.text =
-                            DateFormat("yyyy/MM/dd").format(dateTime);
+                        setState(() {
+                          dateTime = DateTime.now();
+                          _atfcDateTime.text =
+                              DateFormat("yyyy/MM/dd").format(dateTime);
+                        });
                       },
                       icon: Container(
                         padding: const EdgeInsets.symmetric(
@@ -177,6 +176,25 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
           ],
         ),
       ),
+    );
+  }
+
+  void onDateTimeTap() {
+    showDatePicker(
+      context: context,
+      firstDate: DateTime(1970),
+      lastDate: DateTime(2040),
+      initialDate: dateTime,
+    ).then(
+      (value) {
+        if (value != null) {
+          setState(() {
+            dateTime = value;
+            _atfcDateTime.text =
+                DateFormat("yyyy/MM/dd").format(dateTime);
+          });
+        }
+      },
     );
   }
 
