@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:software_testing_project_pfms/home/customers.dart';
 import 'package:software_testing_project_pfms/home/dashboard.dart';
+import 'package:software_testing_project_pfms/home/invoices.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -24,7 +25,6 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: <Widget>[
         const Dashboard(),
-        const Customers(),
         Card(
           shadowColor: Colors.transparent,
           margin: const EdgeInsets.all(8.0),
@@ -37,6 +37,8 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
+        const Invoices(),
+        const Customers(),
 
         /// Messages page
         ListView.builder(
@@ -94,16 +96,16 @@ class _HomeState extends State<Home> {
             label: 'Dashboard',
           ),
           NavigationDestination(
-            icon: Icon(CupertinoIcons.person_2),
-            label: 'Customers',
-          ),
-          NavigationDestination(
             icon: Icon(CupertinoIcons.square_list),
             label: 'Reports',
           ),
           NavigationDestination(
             icon: Icon(CupertinoIcons.list_bullet_below_rectangle),
             label: 'Invoices',
+          ),
+          NavigationDestination(
+            icon: Icon(CupertinoIcons.person_2),
+            label: 'Customers',
           ),
         ],
       ),
