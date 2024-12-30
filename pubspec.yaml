@@ -38,6 +38,8 @@ dependencies:
   floor: ^1.5.0
   sqflite: ^2.3.3+1
   loading_animation_widget: ^1.3.0
+  intl: ^0.20.1
+  currency_textfield: ^4.14.1
 
 dev_dependencies:
   flutter_test:
