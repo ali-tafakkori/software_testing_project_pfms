@@ -1,9 +1,11 @@
+import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/models/customer.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
 import 'package:software_testing_project_pfms/widgets/app_text_field.dart';
+import 'package:intl/intl.dart';
 
 class CustomerDialog extends StatefulWidget {
   final Customer? customer;
@@ -32,15 +34,29 @@ class _CustomerDialogState extends State<CustomerDialog> {
   late final _atfcName = AppTextFieldController(
     text: widget.customer?.name,
   );
+
+  final _cBalance = CurrencyTextFieldController(
+    decimalSymbol: ".",
+    thousandSymbol: ",",
+    numberOfDecimals: 0,
+    currencySymbol: "\$",
+  );
   late final _atfcBalance = AppTextFieldController(
-    text: widget.customer?.balance == null || widget.customer?.balance == 0
-        ? ""
-        : widget.customer?.balance.toString(),
+    controller: _cBalance,
   );
 
   bool obscurePass = true;
   bool hasFocus = false;
   String? warning;
+
+  @override
+  void initState() {
+    _atfcBalance.text =
+        (widget.customer?.balance == null || widget.customer?.balance == 0
+            ? ""
+            : widget.customer?.balance.toString())!;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,9 +164,7 @@ class _CustomerDialogState extends State<CustomerDialog> {
       Customer(
         id: widget.customer?.id,
         name: _atfcName.text.trim(),
-        balance: int.parse(
-          _atfcBalance.text.trim(),
-        ),
+        balance: _cBalance.intValue,
       ),
     );
   }
@@ -222,12 +236,12 @@ class _CustomersState extends State<Customers> {
                           ),
                           title: Text(customer.name),
                           subtitle: Text(
-                            "${customer.balance > 0 ? "+" : ""} ${customer.balance.toString()} \$",
+                            "${customer.balance > 0 ? "+" : ""} ${NumberFormat.simpleCurrency(decimalDigits: 0).format(customer.balance)}",
                             style: TextStyle(
                               color: customer.balance >= 0
                                   ? customer.balance == 0
-                                  ? null
-                                  : Colors.green
+                                      ? null
+                                      : Colors.green
                                   : Colors.redAccent,
                               fontWeight: FontWeight.w600,
                             ),
