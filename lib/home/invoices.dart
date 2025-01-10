@@ -1,13 +1,88 @@
 import 'package:currency_textfield/currency_textfield.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
+import 'package:software_testing_project_pfms/models/customer.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
 import 'package:software_testing_project_pfms/widgets/app_text_field.dart';
+
+class CustomerListDialog extends StatefulWidget {
+  final int userId;
+  final int selectedId;
+
+  const CustomerListDialog({
+    super.key,
+    required this.userId,
+    required this.selectedId,
+  });
+
+  @override
+  State<CustomerListDialog> createState() => _CustomerListDialogState();
+
+  static Future<Customer?> show(
+    BuildContext context,
+    int userId,
+    int selectedId,
+  ) {
+    return showGeneralDialog<Customer?>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "",
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return CustomerListDialog(
+          userId: userId,
+          selectedId: selectedId,
+        );
+      },
+    );
+  }
+}
+
+class _CustomerListDialogState extends State<CustomerListDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      backgroundColor: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: FutureBuilder(
+          future: AppDatabase.instance.customerDao.findByUserId(
+            widget.userId,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.black.withAlpha(5),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      height: 1,
+                      color: Colors.black26,
+                    ),
+                  ],
+                ),
+              );
+            }
+            return LoadingAnimationWidget.inkDrop(
+              color: Colors.black,
+              size: 30,
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
 
 class InvoiceDialog extends StatefulWidget {
   final Invoice invoice;
@@ -23,6 +98,8 @@ class InvoiceDialog extends StatefulWidget {
   static Future<Invoice?> show(BuildContext context, Invoice invoice) {
     return showGeneralDialog<Invoice?>(
       context: context,
+      barrierDismissible: true,
+      barrierLabel: "",
       pageBuilder: (context, animation, secondaryAnimation) {
         return InvoiceDialog(
           invoice: invoice,
@@ -33,7 +110,9 @@ class InvoiceDialog extends StatefulWidget {
 }
 
 class _InvoiceDialogState extends State<InvoiceDialog> {
-  late DateTime dateTime = widget.invoice!.dateTime;
+  late int customerId;
+  final _atfcCustomer = AppTextFieldController();
+  late DateTime dateTime = widget.invoice.dateTime;
   late final _atfcDateTime = AppTextFieldController(
     text: DateFormat("yyyy/MM/dd").format(dateTime),
   );
@@ -53,10 +132,21 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
 
   @override
   void initState() {
+    AppDatabase.instance.customerDao
+        .findById(
+      widget.invoice.customerId,
+    )
+        .then(
+      (value) {
+        if (value != null) {
+          customerId = value.id!;
+          _atfcCustomer.text = value.name;
+        }
+      },
+    );
+
     _atfcAmount.text =
-        (widget.invoice?.amount == null || widget.invoice?.amount == 0
-            ? ""
-            : widget.invoice?.amount.toString())!;
+        (widget.invoice.amount == 0 ? "" : widget.invoice.amount.toString());
     super.initState();
   }
 
@@ -88,6 +178,22 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
               ),
               child: Column(
                 children: [
+                  AppTextField(
+                    controller: _atfcCustomer,
+                    inputType: TextInputType.text,
+                    hintText: "Customer",
+                    noBorder: true,
+                    width: double.infinity,
+                    readOnly: true,
+                    onTap: onUserTap,
+                    prefixIcon: const Icon(
+                      Icons.person_outline_rounded,
+                    ),
+                  ),
+                  Container(
+                    height: 1,
+                    color: Colors.black26,
+                  ),
                   AppTextField(
                     controller: _atfcDateTime,
                     inputType: TextInputType.text,
@@ -174,6 +280,22 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
     );
   }
 
+  void onUserTap() {
+    CustomerListDialog.show(
+      context,
+      widget.invoice.userId,
+      widget.invoice.customerId,
+    ).then(
+      (value) {
+        if (value != null) {
+          setState(() {
+            customerId = value.id!;
+          });
+        }
+      },
+    );
+  }
+
   void onDateTimeTap() {
     showDatePicker(
       context: context,
@@ -201,6 +323,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
         id: widget.invoice.id,
         dateTime: dateTime,
         amount: _cAmount.intValue,
+        customerId: -1,
         userId: MyApp.of(context)!.userId!,
       ),
     );
@@ -227,6 +350,7 @@ class _InvoicesState extends State<Invoices> {
               Invoice(
                 amount: 0,
                 dateTime: DateTime.now(),
+                customerId: -1,
                 userId: MyApp.of(context)!.userId!,
               )).then(
             (value) async {
