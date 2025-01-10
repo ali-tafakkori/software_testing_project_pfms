@@ -3,8 +3,8 @@ import 'package:software_testing_project_pfms/models/customer.dart';
 
 @floor.dao
 abstract class CustomerDao {
-  @floor.Query('SELECT * FROM customer')
-  Future<List<Customer>> findAll();
+  @floor.Query('SELECT * FROM customer WHERE userId = :userId')
+  Future<List<Customer>> findByUserId(int userId);
   @floor.Query('SELECT * FROM user WHERE id = :id')
   Future<Customer?> findById(int id);
   @floor.insert
@@ -16,6 +16,6 @@ abstract class CustomerDao {
   @floor.Query('DELETE FROM customer WHERE id = :id')
   Future<void> deleteById(int id);
 
-  @floor.Query('SELECT COUNT(*) FROM customer')
-  Future<int?> count();
+  @floor.Query('SELECT COUNT(*) FROM customer WHERE userId = :userId')
+  Future<int?> countByUserId(int userId);
 }
