@@ -4,10 +4,10 @@ import 'package:floor/floor.dart';
 class Purchase {
   final int amount;
   final DateTime dateTime;
-  final int userId;
+  final int customerId;
   Purchase({
     required this.amount,
     required this.dateTime,
-    required this.userId,
+    required this.customerId,
   });
 }
