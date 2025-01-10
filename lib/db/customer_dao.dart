@@ -5,8 +5,10 @@ import 'package:software_testing_project_pfms/models/customer.dart';
 abstract class CustomerDao {
   @floor.Query('SELECT * FROM customer WHERE userId = :userId')
   Future<List<Customer>> findByUserId(int userId);
-  @floor.Query('SELECT * FROM user WHERE id = :id')
+
+  @floor.Query('SELECT * FROM customer WHERE id = :id')
   Future<Customer?> findById(int id);
+
   @floor.insert
   Future<void> insert(Customer customer);
 
