@@ -57,10 +57,9 @@ class _CustomerDialogState extends State<CustomerDialog> {
 
   @override
   void initState() {
-    _atfcBalance.text =
-        (widget.customer.balance == 0
-            ? ""
-            : widget.customer.balance.toString());
+    _atfcBalance.text = (widget.customer.balance == 0
+        ? ""
+        : widget.customer.balance.toString());
     super.initState();
   }
 
@@ -208,11 +207,12 @@ class _CustomersState extends State<Customers> {
         child: const Icon(Icons.add),
         onPressed: () {
           CustomerDialog.show(
-              context,
-              Customer(
-                name: "",
-                userId: MyApp.of(context)!.userId!,
-              )).then(
+            context,
+            Customer(
+              name: "",
+              userId: MyApp.of(context)!.userId!,
+            ),
+          ).then(
             (value) async {
               if (value != null) {
                 await AppDatabase.instance.customerDao.insert(value);
