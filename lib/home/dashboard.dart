@@ -299,7 +299,7 @@ class _DashboardState extends State<Dashboard> {
             child: Center(
               child: FutureBuilder(
                 future: AppDatabase.instance.database.rawQuery(
-                  "SELECT t1.*,t2.name FROM invoice AS t1 INNER JOIN customer AS t2 ON t1.userId = t2.id WHERE t1.userId = ?1",
+                  "SELECT c.name AS name, DATE(i.dateTime) AS dateTime, SUM(i.amount) AS amount, c.id AS customerId, c.userId FROM invoice i JOIN customer c ON i.id = c.id WHERE c.userId = ?1 GROUP BY name, dateTime ORDER BY dateTime, name",
                   [
                     MyApp.of(context)!.userId!,
                   ],
@@ -337,9 +337,8 @@ class _DashboardState extends State<Dashboard> {
                           );
                           return Card(
                             child: ListTile(
-                              leading: Text(
-                                DateFormat("yyyy/MM/dd")
-                                    .format(purchase.dateTime),
+                              leading: const Icon(
+                                Icons.view_headline_outlined,
                               ),
                               title: Text(
                                   NumberFormat.simpleCurrency(decimalDigits: 0)
@@ -362,12 +361,13 @@ class _DashboardState extends State<Dashboard> {
                                   );
                                 },
                               ),
-                              trailing: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.view_headline_outlined,
-                                ),
+                              trailing: Text(
+                                DateFormat("yyyy/MM/dd")
+                                    .format(purchase.dateTime),
                               ),
+                              onTap: () {
+
+                              },
                             ),
                           );
                         },
