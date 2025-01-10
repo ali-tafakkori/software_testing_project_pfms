@@ -104,7 +104,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Customer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL, `userId` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL, `userId` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL, `customerId` INTEGER NOT NULL, `userId` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -334,6 +334,7 @@ class _$InvoiceDao extends InvoiceDao {
                   'id': item.id,
                   'amount': item.amount,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
+                  'customerId': item.customerId,
                   'userId': item.userId
                 }),
         _invoiceUpdateAdapter = UpdateAdapter(
@@ -344,6 +345,7 @@ class _$InvoiceDao extends InvoiceDao {
                   'id': item.id,
                   'amount': item.amount,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
+                  'customerId': item.customerId,
                   'userId': item.userId
                 });
 
@@ -364,6 +366,7 @@ class _$InvoiceDao extends InvoiceDao {
             id: row['id'] as int?,
             amount: row['amount'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as String),
+            customerId: row['customerId'] as int,
             userId: row['userId'] as int),
         arguments: [userId]);
   }
@@ -375,6 +378,7 @@ class _$InvoiceDao extends InvoiceDao {
             id: row['id'] as int?,
             amount: row['amount'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as String),
+            customerId: row['customerId'] as int,
             userId: row['userId'] as int),
         arguments: [id]);
   }
