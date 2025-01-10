@@ -44,7 +44,7 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Icon(
-                CupertinoIcons.person,
+                CupertinoIcons.person_crop_circle,
                 color: Colors.amber,
                 size: 90,
               ),
@@ -193,7 +193,7 @@ class _LoginState extends State<Login> {
         if (mounted) {
           MyApp.of(context)?.userId = user.id;
           ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-          Navigator.of(context).pushReplacementNamed(Routes.home.toString());
+          Navigator.of(context).pushNamed(Routes.home.toString());
         }
       } else {
         hasFocus = true;
