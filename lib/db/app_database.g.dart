@@ -288,7 +288,7 @@ class _$CustomerDao extends CustomerDao {
 
   @override
   Future<Customer?> findById(int id) async {
-    return _queryAdapter.query('SELECT * FROM user WHERE id = ?1',
+    return _queryAdapter.query('SELECT * FROM customer WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Customer(
             id: row['id'] as int?,
             name: row['name'] as String,
