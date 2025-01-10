@@ -9,7 +9,7 @@ class Customer {
   final int userId;
 
   const Customer({
-    this.id = -1,
+    this.id,
     required this.name,
     this.balance = 0,
     required this.userId,
