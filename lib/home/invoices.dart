@@ -4,28 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
+import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
 import 'package:software_testing_project_pfms/widgets/app_text_field.dart';
 
 class InvoiceDialog extends StatefulWidget {
-  late final Invoice? invoice;
+  final Invoice invoice;
 
-  InvoiceDialog({
+  const InvoiceDialog({
     super.key,
-    Invoice? invoice,
-  }) {
-    this.invoice = invoice ??
-        Invoice(
-          amount: 0,
-          dateTime: DateTime.now(),
-        );
-  }
+    required this.invoice,
+  });
 
   @override
   State<InvoiceDialog> createState() => _InvoiceDialogState();
 
-  static Future<Invoice?> show(BuildContext context, [Invoice? invoice]) {
+  static Future<Invoice?> show(BuildContext context, Invoice invoice) {
     return showGeneralDialog<Invoice?>(
       context: context,
       pageBuilder: (context, animation, secondaryAnimation) {
@@ -190,8 +185,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
         if (value != null) {
           setState(() {
             dateTime = value;
-            _atfcDateTime.text =
-                DateFormat("yyyy/MM/dd").format(dateTime);
+            _atfcDateTime.text = DateFormat("yyyy/MM/dd").format(dateTime);
           });
         }
       },
@@ -204,9 +198,10 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
     }
     Navigator.of(context).pop(
       Invoice(
-        id: widget.invoice?.id,
+        id: widget.invoice.id,
         dateTime: dateTime,
         amount: _cAmount.intValue,
+        userId: MyApp.of(context)!.userId!,
       ),
     );
   }
@@ -227,7 +222,13 @@ class _InvoicesState extends State<Invoices> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          InvoiceDialog.show(context).then(
+          InvoiceDialog.show(
+              context,
+              Invoice(
+                amount: 0,
+                dateTime: DateTime.now(),
+                userId: MyApp.of(context)!.userId!,
+              )).then(
             (value) async {
               if (value != null) {
                 await AppDatabase.instance.invoiceDao.insert(value);
@@ -242,7 +243,9 @@ class _InvoicesState extends State<Invoices> {
         padding: const EdgeInsets.all(16),
         child: Center(
           child: FutureBuilder(
-            future: AppDatabase.instance.invoiceDao.findAll(),
+            future: AppDatabase.instance.invoiceDao.findByUserId(
+              MyApp.of(context)!.userId!,
+            ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.data!.isEmpty) {
