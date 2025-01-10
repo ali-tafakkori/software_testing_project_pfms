@@ -102,9 +102,9 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `User` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `username` TEXT NOT NULL, `password` TEXT NOT NULL, `balance` INTEGER NOT NULL, `name` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Customer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Customer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL, `userId` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL, `userId` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -251,7 +251,8 @@ class _$CustomerDao extends CustomerDao {
             (Customer item) => <String, Object?>{
                   'id': item.id,
                   'name': item.name,
-                  'balance': item.balance
+                  'balance': item.balance,
+                  'userId': item.userId
                 }),
         _customerUpdateAdapter = UpdateAdapter(
             database,
@@ -260,7 +261,8 @@ class _$CustomerDao extends CustomerDao {
             (Customer item) => <String, Object?>{
                   'id': item.id,
                   'name': item.name,
-                  'balance': item.balance
+                  'balance': item.balance,
+                  'userId': item.userId
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -274,12 +276,14 @@ class _$CustomerDao extends CustomerDao {
   final UpdateAdapter<Customer> _customerUpdateAdapter;
 
   @override
-  Future<List<Customer>> findAll() async {
-    return _queryAdapter.queryList('SELECT * FROM customer',
+  Future<List<Customer>> findByUserId(int userId) async {
+    return _queryAdapter.queryList('SELECT * FROM customer WHERE userId = ?1',
         mapper: (Map<String, Object?> row) => Customer(
             id: row['id'] as int?,
             name: row['name'] as String,
-            balance: row['balance'] as int));
+            balance: row['balance'] as int,
+            userId: row['userId'] as int),
+        arguments: [userId]);
   }
 
   @override
@@ -288,7 +292,8 @@ class _$CustomerDao extends CustomerDao {
         mapper: (Map<String, Object?> row) => Customer(
             id: row['id'] as int?,
             name: row['name'] as String,
-            balance: row['balance'] as int),
+            balance: row['balance'] as int,
+            userId: row['userId'] as int),
         arguments: [id]);
   }
 
@@ -299,9 +304,11 @@ class _$CustomerDao extends CustomerDao {
   }
 
   @override
-  Future<int?> count() async {
-    return _queryAdapter.query('SELECT COUNT(*) FROM customer',
-        mapper: (Map<String, Object?> row) => row.values.first as int);
+  Future<int?> countByUserId(int userId) async {
+    return _queryAdapter.query(
+        'SELECT COUNT(*) FROM customer WHERE userId = ?1',
+        mapper: (Map<String, Object?> row) => row.values.first as int,
+        arguments: [userId]);
   }
 
   @override
@@ -326,7 +333,8 @@ class _$InvoiceDao extends InvoiceDao {
             (Invoice item) => <String, Object?>{
                   'id': item.id,
                   'amount': item.amount,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                  'dateTime': _dateTimeConverter.encode(item.dateTime),
+                  'userId': item.userId
                 }),
         _invoiceUpdateAdapter = UpdateAdapter(
             database,
@@ -335,7 +343,8 @@ class _$InvoiceDao extends InvoiceDao {
             (Invoice item) => <String, Object?>{
                   'id': item.id,
                   'amount': item.amount,
-                  'dateTime': _dateTimeConverter.encode(item.dateTime)
+                  'dateTime': _dateTimeConverter.encode(item.dateTime),
+                  'userId': item.userId
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -349,12 +358,14 @@ class _$InvoiceDao extends InvoiceDao {
   final UpdateAdapter<Invoice> _invoiceUpdateAdapter;
 
   @override
-  Future<List<Invoice>> findAll() async {
-    return _queryAdapter.queryList('SELECT * FROM invoice',
+  Future<List<Invoice>> findByUserId(int userId) async {
+    return _queryAdapter.queryList('SELECT * FROM invoice WHERE userId = ?1',
         mapper: (Map<String, Object?> row) => Invoice(
             id: row['id'] as int?,
             amount: row['amount'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as String)));
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as String),
+            userId: row['userId'] as int),
+        arguments: [userId]);
   }
 
   @override
@@ -363,7 +374,8 @@ class _$InvoiceDao extends InvoiceDao {
         mapper: (Map<String, Object?> row) => Invoice(
             id: row['id'] as int?,
             amount: row['amount'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as String)),
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as String),
+            userId: row['userId'] as int),
         arguments: [id]);
   }
 
@@ -374,9 +386,10 @@ class _$InvoiceDao extends InvoiceDao {
   }
 
   @override
-  Future<int?> count() async {
-    return _queryAdapter.query('SELECT COUNT(*) FROM invoice',
-        mapper: (Map<String, Object?> row) => row.values.first as int);
+  Future<int?> countByUserId(int userId) async {
+    return _queryAdapter.query('SELECT COUNT(*) FROM invoice WHERE userId = ?1',
+        mapper: (Map<String, Object?> row) => row.values.first as int,
+        arguments: [userId]);
   }
 
   @override
