@@ -22,6 +22,8 @@ class CustomerDialog extends StatefulWidget {
   static Future<Customer?> show(BuildContext context, Customer customer) {
     return showGeneralDialog<Customer?>(
       context: context,
+      barrierDismissible: true,
+      barrierLabel: "",
       pageBuilder: (context, animation, secondaryAnimation) {
         return CustomerDialog(
           customer: customer,
@@ -56,9 +58,9 @@ class _CustomerDialogState extends State<CustomerDialog> {
   @override
   void initState() {
     _atfcBalance.text =
-        (widget.customer?.balance == null || widget.customer?.balance == 0
+        (widget.customer.balance == 0
             ? ""
-            : widget.customer?.balance.toString())!;
+            : widget.customer.balance.toString());
     super.initState();
   }
 
