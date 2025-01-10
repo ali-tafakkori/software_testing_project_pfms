@@ -6,11 +6,13 @@ class Invoice {
   final int? id;
   final int amount;
   final DateTime dateTime;
+  final int customerId;
   final int userId;
   Invoice({
     this.id,
     required this.amount,
     required this.dateTime,
+    required this.customerId,
     required this.userId,
   });
 }
