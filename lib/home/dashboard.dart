@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
+import 'package:software_testing_project_pfms/models/purchase.dart';
 import 'package:software_testing_project_pfms/models/user.dart';
 
 class Dashboard extends StatefulWidget {
@@ -48,7 +49,7 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 8,
                     ),
                     FutureBuilder<User?>(
                       future: AppDatabase.instance.userDao
@@ -76,7 +77,7 @@ class _DashboardState extends State<Dashboard> {
                         }
                         return LoadingAnimationWidget.newtonCradle(
                           color: Colors.black,
-                          size: 200,
+                          size: 53,
                         );
                       },
                     ),
@@ -113,7 +114,7 @@ class _DashboardState extends State<Dashboard> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(
-                                      Icons.person_outline_rounded,
+                                      CupertinoIcons.person_2,
                                       color: color,
                                     ),
                                     Text(
@@ -293,37 +294,92 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
         Expanded(
-          child: Center(
-            child: FutureBuilder(
-              future: AppDatabase.instance.database.rawQuery("sql"),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!.isEmpty) {
-                    return const Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.folder_off_rounded,
-                          size: 80,
-                          color: Colors.black45,
-                        ),
-                        Text(
-                          "No Purchase",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w900,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: FutureBuilder(
+                future: AppDatabase.instance.database.rawQuery(
+                  "SELECT t1.*,t2.name FROM invoice AS t1 INNER JOIN customer AS t2 ON t1.userId = t2.id WHERE t1.userId = ?1",
+                  [
+                    MyApp.of(context)!.userId!,
+                  ],
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.isEmpty) {
+                      return const Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.grid_off,
+                            size: 80,
                             color: Colors.black45,
                           ),
-                        ),
-                      ],
-                    );
+                          Text(
+                            "No Purchase",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.black45,
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, i) {
+                          var map = snapshot.data![i];
+                          Purchase purchase = Purchase(
+                            amount: map["amount"] as int,
+                            dateTime: DateTime.parse(map["dateTime"] as String),
+                            customerId: map["customerId"] as int,
+                          );
+                          return Card(
+                            child: ListTile(
+                              leading: Text(
+                                DateFormat("yyyy/MM/dd")
+                                    .format(purchase.dateTime),
+                              ),
+                              title: Text(
+                                  NumberFormat.simpleCurrency(decimalDigits: 0)
+                                      .format(purchase.amount)),
+                              subtitle: FutureBuilder(
+                                future: AppDatabase.instance.customerDao
+                                    .findById(purchase.customerId),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      snapshot.data!.name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    );
+                                  }
+                                  return LoadingAnimationWidget.progressiveDots(
+                                    color: Colors.black,
+                                    size: 24,
+                                  );
+                                },
+                              ),
+                              trailing: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.view_headline_outlined,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
                   }
-                }
-                return LoadingAnimationWidget.inkDrop(
-                  color: Colors.amber,
-                  size: 48,
-                );
-              },
+                  return LoadingAnimationWidget.inkDrop(
+                    color: Colors.amber,
+                    size: 48,
+                  );
+                },
+              ),
             ),
           ),
         ),
