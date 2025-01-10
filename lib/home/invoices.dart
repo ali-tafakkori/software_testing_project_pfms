@@ -57,21 +57,77 @@ class _CustomerListDialogState extends State<CustomerListDialog> {
           ),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black.withAlpha(5),
-                ),
-                child: Column(
+              if (snapshot.data!.isEmpty) {
+                return const Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      height: 1,
-                      color: Colors.black26,
+                    Icon(
+                      Icons.person_off_rounded,
+                      size: 80,
+                      color: Colors.black45,
+                    ),
+                    Text(
+                      "No Customer",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black45,
+                      ),
                     ),
                   ],
-                ),
-              );
+                );
+              } else {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.black.withAlpha(5),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        for (Customer customer in snapshot.data!) ...[
+                          ListTile(
+                            tileColor: customer.id == widget.selectedId
+                                ? Colors.amber
+                                : null,
+                            leading: const Icon(
+                              Icons.person,
+                              color: Colors.amber,
+                              size: 30,
+                            ),
+                            title: Text(customer.name),
+                            subtitle: Text(
+                              "${customer.balance > 0 ? "+" : ""} ${NumberFormat.simpleCurrency(decimalDigits: 0).format(customer.balance)}",
+                              style: TextStyle(
+                                color: customer.balance >= 0
+                                    ? customer.balance == 0
+                                        ? null
+                                        : Colors.green
+                                    : Colors.redAccent,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.of(
+                                context,
+                                rootNavigator: true,
+                              ).pop(
+                                customer,
+                              );
+                            },
+                          ),
+                          if (snapshot.data!.last != customer)
+                            Container(
+                              height: 1,
+                              color: Colors.black26,
+                            ),
+                        ]
+                      ],
+                    ),
+                  ),
+                );
+              }
             }
             return LoadingAnimationWidget.inkDrop(
               color: Colors.black,
@@ -139,8 +195,10 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
         .then(
       (value) {
         if (value != null) {
-          customerId = value.id!;
           _atfcCustomer.text = value.name;
+          setState(() {
+            customerId = value.id!;
+          });
         }
       },
     );
@@ -185,7 +243,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                     noBorder: true,
                     width: double.infinity,
                     readOnly: true,
-                    onTap: onUserTap,
+                    onTap: onCustomerTap,
                     prefixIcon: const Icon(
                       Icons.person_outline_rounded,
                     ),
@@ -280,7 +338,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
     );
   }
 
-  void onUserTap() {
+  void onCustomerTap() {
     CustomerListDialog.show(
       context,
       widget.invoice.userId,
@@ -288,6 +346,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
     ).then(
       (value) {
         if (value != null) {
+          _atfcCustomer.text = value.name;
           setState(() {
             customerId = value.id!;
           });
@@ -323,7 +382,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
         id: widget.invoice.id,
         dateTime: dateTime,
         amount: _cAmount.intValue,
-        customerId: -1,
+        customerId: customerId,
         userId: MyApp.of(context)!.userId!,
       ),
     );
