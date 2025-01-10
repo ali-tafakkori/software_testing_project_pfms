@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:software_testing_project_pfms/home/customers.dart';
 import 'package:software_testing_project_pfms/home/dashboard.dart';
 import 'package:software_testing_project_pfms/home/invoices.dart';
+import 'package:software_testing_project_pfms/home/settings.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -27,6 +28,7 @@ class _HomeState extends State<Home> {
         const Dashboard(),
         const Invoices(),
         const Customers(),
+        const Settings(),
       ][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -48,6 +50,10 @@ class _HomeState extends State<Home> {
           NavigationDestination(
             icon: Icon(CupertinoIcons.person_2),
             label: 'Customers',
+          ),
+          NavigationDestination(
+            icon: Icon(CupertinoIcons.settings),
+            label: 'Settings',
           ),
         ],
       ),
