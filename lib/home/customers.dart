@@ -2,23 +2,24 @@ import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
+import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/customer.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
 import 'package:software_testing_project_pfms/widgets/app_text_field.dart';
 import 'package:intl/intl.dart';
 
 class CustomerDialog extends StatefulWidget {
-  final Customer? customer;
+  final Customer customer;
 
   const CustomerDialog({
     super.key,
-    this.customer = const Customer(name: ""),
+    required this.customer,
   });
 
   @override
   State<CustomerDialog> createState() => _CustomerDialogState();
 
-  static Future<Customer?> show(BuildContext context, [Customer? customer]) {
+  static Future<Customer?> show(BuildContext context, Customer customer) {
     return showGeneralDialog<Customer?>(
       context: context,
       pageBuilder: (context, animation, secondaryAnimation) {
@@ -180,9 +181,10 @@ class _CustomerDialogState extends State<CustomerDialog> {
     }
     Navigator.of(context).pop(
       Customer(
-        id: widget.customer?.id,
+        id: widget.customer.id,
         name: _atfcName.text.trim(),
         balance: intValue,
+        userId: MyApp.of(context)!.userId!,
       ),
     );
   }
@@ -203,7 +205,12 @@ class _CustomersState extends State<Customers> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          CustomerDialog.show(context).then(
+          CustomerDialog.show(
+              context,
+              Customer(
+                name: "",
+                userId: MyApp.of(context)!.userId!,
+              )).then(
             (value) async {
               if (value != null) {
                 await AppDatabase.instance.customerDao.insert(value);
@@ -218,7 +225,9 @@ class _CustomersState extends State<Customers> {
         padding: const EdgeInsets.all(16),
         child: Center(
           child: FutureBuilder(
-            future: AppDatabase.instance.customerDao.findAll(),
+            future: AppDatabase.instance.customerDao.findByUserId(
+              MyApp.of(context)!.userId!,
+            ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.data!.isEmpty) {
