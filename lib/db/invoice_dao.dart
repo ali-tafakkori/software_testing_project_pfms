@@ -3,8 +3,8 @@ import 'package:software_testing_project_pfms/models/invoice.dart';
 
 @floor.dao
 abstract class InvoiceDao {
-  @floor.Query('SELECT * FROM invoice')
-  Future<List<Invoice>> findAll();
+  @floor.Query('SELECT * FROM invoice WHERE userId = :userId')
+  Future<List<Invoice>> findByUserId(int userId);
 
   @floor.Query('SELECT * FROM invoice WHERE id = :id')
   Future<Invoice?> findById(int id);
@@ -18,6 +18,6 @@ abstract class InvoiceDao {
   @floor.Query('DELETE FROM invoice WHERE id = :id')
   Future<void> deleteById(int id);
 
-  @floor.Query('SELECT COUNT(*) FROM invoice')
-  Future<int?> count();
+  @floor.Query('SELECT COUNT(*) FROM invoice WHERE userId = :userId')
+  Future<int?> countByUserId(int userId);
 }
