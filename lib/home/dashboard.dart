@@ -161,7 +161,8 @@ class _DashboardState extends State<Dashboard> {
                         child: Center(
                           child: FutureBuilder(
                             future: AppDatabase.instance.database.rawQuery(
-                              "SELECT (IFNULL((SELECT SUM(balance) FROM customer WHERE userId = ?1), 0) - IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) - (IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) * 0.1)) AS profit",
+                              //"SELECT (IFNULL((SELECT SUM(balance) FROM customer WHERE userId = ?1), 0) - IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) - (IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) * 0.1)) AS profit",
+                              "SELECT (IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) * 0.1) AS profit",
                               [
                                 MyApp.of(context)!.userId!,
                               ],
