@@ -108,7 +108,8 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: Center(
                             child: FutureBuilder(
-                              future: AppDatabase.instance.profit(MyApp.of(context)!.userId!),
+                              future: AppDatabase.instance
+                                  .profit(MyApp.of(context)!.userId!),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   double i = snapshot.data!;
@@ -167,7 +168,8 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: Center(
                             child: FutureBuilder(
-                              future: AppDatabase.instance.debt(MyApp.of(context)!.userId!),
+                              future: AppDatabase.instance
+                                  .debt(MyApp.of(context)!.userId!),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   int i = snapshot.data!;
@@ -238,11 +240,8 @@ class _DashboardState extends State<Dashboard> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Center(
                   child: FutureBuilder(
-                    future: AppDatabase.instance.database.rawQuery(
-                      "SELECT c.id AS customerId, DATE(i.dateTime) AS day, SUM(i.amount) AS amount FROM invoice i JOIN customer c ON i.customerId = c.id WHERE c.userId = ?1 GROUP BY customerId, day ORDER BY day, customerId",
-                      [
-                        MyApp.of(context)!.userId!,
-                      ],
+                    future: AppDatabase.instance.findPurchases(
+                      MyApp.of(context)!.userId!,
                     ),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -269,12 +268,7 @@ class _DashboardState extends State<Dashboard> {
                           return ListView.builder(
                             itemCount: snapshot.data!.length,
                             itemBuilder: (context, i) {
-                              var map = snapshot.data![i];
-                              Purchase purchase = Purchase(
-                                amount: map["amount"] as int,
-                                dateTime: DateTime.parse(map["day"] as String),
-                                customerId: map["customerId"] as int,
-                              );
+                              var purchase = snapshot.data![i];
                               return Card(
                                 child: ListTile(
                                   leading: const Icon(
