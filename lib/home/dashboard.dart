@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +5,6 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/purchase.dart';
-import 'package:software_testing_project_pfms/models/user.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -111,18 +108,10 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: Center(
                             child: FutureBuilder(
-                              future: AppDatabase.instance.database.rawQuery(
-                                //"SELECT (IFNULL((SELECT SUM(balance) FROM customer WHERE userId = ?1), 0) - IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) - (IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) * 0.1)) AS profit",
-                                "SELECT (IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) * 0.1) AS profit",
-                                [
-                                  MyApp.of(context)!.userId!,
-                                ],
-                              ),
+                              future: AppDatabase.instance.profit(MyApp.of(context)!.userId!),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  var row =
-                                      snapshot.data!.first.values.first ?? 0;
-                                  double i = row as double;
+                                  double i = snapshot.data!;
                                   Color color = i >= 0
                                       ? i == 0
                                           ? Colors.black
@@ -178,17 +167,10 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           child: Center(
                             child: FutureBuilder(
-                              future: AppDatabase.instance.database.rawQuery(
-                                "SELECT (IFNULL((SELECT SUM(balance) FROM customer WHERE userId = ?1), 0) - IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0)) AS difference",
-                                [
-                                  MyApp.of(context)!.userId!,
-                                ],
-                              ),
+                              future: AppDatabase.instance.debt(MyApp.of(context)!.userId!),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  var row =
-                                      snapshot.data!.first.values.first ?? 0;
-                                  int i = row as int;
+                                  int i = snapshot.data!;
                                   Color color = i >= 0
                                       ? i == 0
                                           ? Colors.black
