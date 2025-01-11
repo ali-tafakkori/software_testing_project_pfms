@@ -6,6 +6,7 @@ import 'package:software_testing_project_pfms/db/invoice_dao.dart';
 import 'package:software_testing_project_pfms/db/user_dao.dart';
 import 'package:software_testing_project_pfms/models/customer.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
+import 'package:software_testing_project_pfms/models/purchase.dart';
 import 'package:software_testing_project_pfms/models/user.dart';
 
 import 'package:sqflite/sqflite.dart' as sqflite;
@@ -62,5 +63,20 @@ abstract class AppDatabase extends FloorDatabase {
     var row = result.first.values.first ?? 0;
     int i = row as int;
     return i;
+  }
+  Future<List<Purchase>> findPurchases(int userId) async {
+    var result = await database.rawQuery(
+      "SELECT c.id AS customerId, DATE(i.dateTime) AS day, SUM(i.amount) AS amount FROM invoice i JOIN customer c ON i.customerId = c.id WHERE c.userId = ?1 GROUP BY customerId, day ORDER BY day, customerId",
+      [
+        userId,
+      ],
+    );
+    return result.map((e) {
+      return Purchase(
+        amount: e["amount"] as int,
+        dateTime: DateTime.parse(e["day"] as String),
+        customerId: e["customerId"] as int,
+      );
+    },).toList();
   }
 }
