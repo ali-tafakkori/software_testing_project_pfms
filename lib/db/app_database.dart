@@ -38,4 +38,29 @@ abstract class AppDatabase extends FloorDatabase {
   static Future<void> init() async {
     _appDatabase = await $FloorAppDatabase.databaseBuilder(_dbName).build();
   }
+
+  Future<double> profit(int userId) async {
+    var result = await database.rawQuery(
+      //"SELECT (IFNULL((SELECT SUM(balance) FROM customer WHERE userId = ?1), 0) - IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) - (IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) * 0.1)) AS profit",
+      "SELECT (IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0) * 0.1) AS profit",
+      [
+        userId,
+      ],
+    );
+    var row = result.first.values.first ?? 0;
+    double i = row as double;
+    return i;
+  }
+
+  Future<int> debt(int userId) async {
+    var result = await database.rawQuery(
+      "SELECT (IFNULL((SELECT SUM(balance) FROM customer WHERE userId = ?1), 0) - IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0)) AS difference",
+      [
+        userId,
+      ],
+    );
+    var row = result.first.values.first ?? 0;
+    int i = row as int;
+    return i;
+  }
 }
