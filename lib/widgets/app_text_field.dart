@@ -74,7 +74,7 @@ class AppTextField extends StatefulWidget {
   final TextDirection? textDirection;
   final bool? enabled;
 
-  const AppTextField({
+  const AppTextField({super.key,
     this.width = 250,
     this.height,
     required this.controller,
