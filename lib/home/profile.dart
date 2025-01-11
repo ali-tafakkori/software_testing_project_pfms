@@ -85,6 +85,88 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             ),
+            const SizedBox(
+              height: 24,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.abc,
+                      ),
+                      title: const Text(
+                        "Edit Name",
+                      ),
+                      trailing: const Icon(Icons.arrow_forward),
+                      onTap: () {},
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.alternate_email_outlined,
+                      ),
+                      title: const Text(
+                        "Edit Username",
+                      ),
+                      trailing: const Icon(Icons.arrow_forward),
+                      onTap: () {},
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.vpn_key_outlined,
+                      ),
+                      title: const Text(
+                        "Change Password",
+                      ),
+                      trailing: const Icon(Icons.arrow_forward),
+                      onTap: () {},
+                    ),
+                  ),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.logout,
+                      ),
+                      title: const Text(
+                        "Logout",
+                      ),
+                      trailing: const Icon(Icons.arrow_forward),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        MyApp.of(context)?.userId = null;
+                      },
+                    ),
+                  ),
+                  const Divider(),
+                  Card(
+                    color: Colors.redAccent,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.delete_outlined,
+                        color: Colors.white,
+                      ),
+                      title: const Text(
+                        "Delete Account",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward,
+                        color: Colors.white,
+                      ),
+                      onTap: () {},
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
