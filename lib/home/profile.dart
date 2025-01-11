@@ -334,18 +334,18 @@ class _PasswordDialogState extends State<PasswordDialog> {
                     width: double.infinity,
                     suffixIcon: _atfcPass.text.isNotEmpty
                         ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          obscurePass = !obscurePass;
-                        });
-                      },
-                      icon: Icon(
-                        obscurePass
-                            ? CupertinoIcons.eye
-                            : CupertinoIcons.eye_slash,
-                        color: Colors.amber,
-                      ),
-                    )
+                            onPressed: () {
+                              setState(() {
+                                obscurePass = !obscurePass;
+                              });
+                            },
+                            icon: Icon(
+                              obscurePass
+                                  ? CupertinoIcons.eye
+                                  : CupertinoIcons.eye_slash,
+                              color: Colors.amber,
+                            ),
+                          )
                         : null,
                     onChanged: (value) {
                       setState(() {
@@ -371,18 +371,18 @@ class _PasswordDialogState extends State<PasswordDialog> {
                     width: double.infinity,
                     suffixIcon: _atfcRepeatPass.text.isNotEmpty
                         ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          obscureRepeatPass = !obscureRepeatPass;
-                        });
-                      },
-                      icon: Icon(
-                        obscureRepeatPass
-                            ? CupertinoIcons.eye
-                            : CupertinoIcons.eye_slash,
-                        color: Colors.amber,
-                      ),
-                    )
+                            onPressed: () {
+                              setState(() {
+                                obscureRepeatPass = !obscureRepeatPass;
+                              });
+                            },
+                            icon: Icon(
+                              obscureRepeatPass
+                                  ? CupertinoIcons.eye
+                                  : CupertinoIcons.eye_slash,
+                              color: Colors.amber,
+                            ),
+                          )
                         : null,
                     onChanged: (value) {
                       setState(() {
@@ -419,9 +419,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
             AppButton(
               text: "Save",
               onPressed: onSavePressed,
-              color: _atfcPass.text.isNotEmpty
-                  ? Colors.amber
-                  : Colors.blueGrey,
+              color: _atfcPass.text.isNotEmpty ? Colors.amber : Colors.blueGrey,
             ),
           ],
         ),
@@ -602,6 +600,7 @@ class _ProfileState extends State<Profile> {
                               },
                             ),
                           ),
+                          const Divider(),
                           Card(
                             child: ListTile(
                               leading: const Icon(
@@ -617,8 +616,7 @@ class _ProfileState extends State<Profile> {
                               },
                             ),
                           ),
-                          const Divider(),
-                          Card(
+                          /*Card(
                             color: Colors.redAccent,
                             child: ListTile(
                               leading: const Icon(
@@ -637,7 +635,7 @@ class _ProfileState extends State<Profile> {
                               ),
                               onTap: () {},
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
