@@ -472,7 +472,7 @@ class _ProfileState extends State<Profile> {
                       width: double.infinity,
                       padding: EdgeInsets.only(
                         top: MediaQuery.of(context).padding.top + 24,
-                        bottom: 16,
+                        bottom: MediaQuery.of(context).padding.top + 24,
                       ),
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.vertical(
@@ -494,7 +494,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: const Icon(
                               CupertinoIcons.person,
-                              color: Colors.black,
+                              color: Colors.white,
                               size: 60,
                             ),
                           ),
