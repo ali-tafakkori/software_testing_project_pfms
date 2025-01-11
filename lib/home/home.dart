@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:software_testing_project_pfms/home/customers.dart';
 import 'package:software_testing_project_pfms/home/dashboard.dart';
 import 'package:software_testing_project_pfms/home/invoices.dart';
-import 'package:software_testing_project_pfms/home/settings.dart';
+import 'package:software_testing_project_pfms/home/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -28,34 +28,39 @@ class _HomeState extends State<Home> {
         const Dashboard(),
         const Invoices(),
         const Customers(),
-        const Settings(),
+        const Profile(),
       ][currentPageIndex],
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        indicatorColor: Colors.amber,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(CupertinoIcons.home),
-            label: 'Dashboard',
-          ),
-          NavigationDestination(
-            icon: Icon(CupertinoIcons.list_bullet_below_rectangle),
-            label: 'Invoices',
-          ),
-          NavigationDestination(
-            icon: Icon(CupertinoIcons.person_2),
-            label: 'Customers',
-          ),
-          NavigationDestination(
-            icon: Icon(CupertinoIcons.settings),
-            label: 'Settings',
-          ),
-        ],
+      bottomNavigationBar: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(16),
+        ),
+        child: NavigationBar(
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          indicatorColor: Colors.amber,
+          selectedIndex: currentPageIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              icon: Icon(CupertinoIcons.home),
+              label: 'Dashboard',
+            ),
+            NavigationDestination(
+              icon: Icon(CupertinoIcons.list_bullet_below_rectangle),
+              label: 'Invoices',
+            ),
+            NavigationDestination(
+              icon: Icon(CupertinoIcons.person_2),
+              label: 'Customers',
+            ),
+            NavigationDestination(
+              icon: Icon(CupertinoIcons.profile_circled),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
     );
   }
