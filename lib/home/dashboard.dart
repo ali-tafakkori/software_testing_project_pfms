@@ -299,7 +299,7 @@ class _DashboardState extends State<Dashboard> {
             child: Center(
               child: FutureBuilder(
                 future: AppDatabase.instance.database.rawQuery(
-                  "SELECT c.name AS name, DATE(i.dateTime) AS dateTime, SUM(i.amount) AS amount, c.id AS customerId, c.userId FROM invoice i JOIN customer c ON i.id = c.id WHERE c.userId = ?1 GROUP BY name, dateTime ORDER BY dateTime, name",
+                  "SELECT c.id AS customerId, DATE(i.dateTime) AS day, SUM(i.amount) AS amount FROM invoice i JOIN customer c ON i.customerId = c.id WHERE c.userId = ?1 GROUP BY customerId, day ORDER BY day, customerId",
                   [
                     MyApp.of(context)!.userId!,
                   ],
@@ -332,7 +332,7 @@ class _DashboardState extends State<Dashboard> {
                           var map = snapshot.data![i];
                           Purchase purchase = Purchase(
                             amount: map["amount"] as int,
-                            dateTime: DateTime.parse(map["dateTime"] as String),
+                            dateTime: DateTime.parse(map["day"] as String),
                             customerId: map["customerId"] as int,
                           );
                           return Card(
@@ -365,9 +365,7 @@ class _DashboardState extends State<Dashboard> {
                                 DateFormat("yyyy/MM/dd")
                                     .format(purchase.dateTime),
                               ),
-                              onTap: () {
-
-                              },
+                              onTap: () {},
                             ),
                           );
                         },
