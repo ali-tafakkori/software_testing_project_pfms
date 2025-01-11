@@ -143,17 +143,6 @@ class _$UserDao extends UserDao {
                   'balance': item.balance,
                   'name': item.name
                 }),
-        _userUpdateAdapter = UpdateAdapter(
-            database,
-            'User',
-            ['id'],
-            (User item) => <String, Object?>{
-                  'id': item.id,
-                  'username': item.username,
-                  'password': item.password,
-                  'balance': item.balance,
-                  'name': item.name
-                }),
         _userDeletionAdapter = DeletionAdapter(
             database,
             'User',
@@ -174,9 +163,35 @@ class _$UserDao extends UserDao {
 
   final InsertionAdapter<User> _userInsertionAdapter;
 
-  final UpdateAdapter<User> _userUpdateAdapter;
-
   final DeletionAdapter<User> _userDeletionAdapter;
+
+  @override
+  Future<void> updateNameById(
+    String name,
+    int id,
+  ) async {
+    await _queryAdapter.queryNoReturn('UPDATE user SET name = ?1 WHERE id = ?2',
+        arguments: [name, id]);
+  }
+
+  @override
+  Future<void> updateUsernameById(
+    String username,
+    int id,
+  ) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE user SET username = ?1 WHERE id = ?2',
+        arguments: [username, id]);
+  }
+
+  @override
+  Future<void> updatePasswordById(
+    String password,
+    int id,
+  ) async {
+    await _queryAdapter.queryNoReturn('UPDATE user SET password = ?1 WHERE id = ?2',
+        arguments: [password, id]);
+  }
 
   @override
   Future<User?> findByUsernameAndPassword(
@@ -227,11 +242,6 @@ class _$UserDao extends UserDao {
   @override
   Future<void> insert(User user) async {
     await _userInsertionAdapter.insert(user, OnConflictStrategy.abort);
-  }
-
-  @override
-  Future<void> update(User user) async {
-    await _userUpdateAdapter.update(user, OnConflictStrategy.abort);
   }
 
   @override
