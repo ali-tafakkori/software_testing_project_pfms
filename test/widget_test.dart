@@ -7,24 +7,44 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 
-import 'package:software_testing_project_pfms/main.dart';
+import 'package:software_testing_project_pfms/main.dart' as app;
+import 'package:software_testing_project_pfms/widgets/app_button.dart';
+import 'package:software_testing_project_pfms/widgets/app_progress_button.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+  group(
+    "end to end test",
+    () {
+      testWidgets(
+        "register",
+        (tester) async {
+          app.main();
+          await tester.pumpAndSettle();
+          await tester.tap(find.byType(AppButton));
+          await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+          expect(find.text("The information entered is incorrect."),
+              findsOneWidget);
+        },
+      );
+      testWidgets(
+        "login",
+        (tester) async {
+          app.main();
+          await tester.pumpAndSettle();
+          await tester.enterText(find.byKey(const Key("username")), "ali");
+          await tester.enterText(find.byKey(const Key("password")), "12345");
+          await tester.tap(find.byType(AppProgressButton));
+          await tester.pumpAndSettle();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+          expect(find.text("The information entered is incorrect."),
+              findsOneWidget);
+        },
+      );
+    },
+  );
 }
