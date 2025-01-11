@@ -68,6 +68,7 @@ class _LoginState extends State<Login> {
                 child: Column(
                   children: [
                     AppTextField(
+                      key: const Key("username"),
                       controller: _atfcUser,
                       inputType: TextInputType.text,
                       hintText: "Username",
@@ -89,6 +90,7 @@ class _LoginState extends State<Login> {
                       color: Colors.black26,
                     ),
                     AppTextField(
+                      key: const Key("password"),
                       obscure: obscurePass,
                       controller: _atfcPass,
                       inputType: TextInputType.text,
