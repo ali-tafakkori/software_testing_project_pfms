@@ -68,6 +68,7 @@ class _RegisterState extends State<Register> {
                 child: Column(
                   children: [
                     AppTextField(
+                      key: const Key("name"),
                       controller: _atfcName,
                       inputType: TextInputType.text,
                       hintText: "Name",
@@ -89,6 +90,7 @@ class _RegisterState extends State<Register> {
                       color: Colors.black26,
                     ),
                     AppTextField(
+                      key: const Key("username"),
                       controller: _atfcUser,
                       inputType: TextInputType.text,
                       hintText: "Username",
@@ -110,6 +112,7 @@ class _RegisterState extends State<Register> {
                       color: Colors.black26,
                     ),
                     AppTextField(
+                      key: const Key("password"),
                       obscure: obscurePass,
                       controller: _atfcPass,
                       inputType: TextInputType.text,
@@ -147,6 +150,7 @@ class _RegisterState extends State<Register> {
                       color: Colors.black26,
                     ),
                     AppTextField(
+                      key: const Key("repeat password"),
                       obscure: obscureRepeatPass,
                       controller: _atfcRepeatPass,
                       inputType: TextInputType.text,
