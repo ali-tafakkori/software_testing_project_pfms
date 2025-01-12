@@ -26,6 +26,12 @@ void main() {
           await tester.pumpAndSettle();
           await tester.tap(find.byType(AppButton));
           await tester.pumpAndSettle();
+          await tester.enterText(find.byKey(const Key("username")), "ali");
+          await tester.enterText(find.byKey(const Key("name")), "Ali Tafakkori");
+          await tester.enterText(find.byKey(const Key("password")), "12345");
+          await tester.enterText(find.byKey(const Key("repeat password")), "12345");
+          await tester.tap(find.byType(AppProgressButton));
+          await tester.pumpAndSettle();
 
           expect(find.text("The information entered is incorrect."),
               findsOneWidget);
@@ -36,7 +42,7 @@ void main() {
         (tester) async {
           app.main();
           await tester.pumpAndSettle();
-          await tester.enterText(find.byKey(const Key("username")), "ali");
+          await tester.enterText(find.byKey(const Key("username")), "ali2");
           await tester.enterText(find.byKey(const Key("password")), "12345");
           await tester.tap(find.byType(AppProgressButton));
           await tester.pumpAndSettle();
