@@ -155,6 +155,7 @@ class _LoginState extends State<Login> {
                 height: 14,
               ),
               AppButton(
+                key: const Key("register"),
                 text: "Register",
                 onPressed: onRegisterPressed,
                 color: Colors.transparent,
