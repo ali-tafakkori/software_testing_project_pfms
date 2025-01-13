@@ -5,6 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/purchase.dart';
+import 'package:software_testing_project_pfms/router.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -300,7 +301,15 @@ class _DashboardState extends State<Dashboard> {
                                     DateFormat("yyyy/MM/dd")
                                         .format(purchase.dateTime),
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                      Routes.purchaseDetails.toString(),
+                                      arguments: {
+                                        "customerId": purchase.customerId,
+                                        "dateTime": purchase.dateTime,
+                                      },
+                                    );
+                                  },
                                 ),
                               );
                             },
