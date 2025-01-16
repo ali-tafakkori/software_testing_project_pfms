@@ -8,11 +8,13 @@ class Invoice {
   final DateTime dateTime;
   final int customerId;
   final int userId;
+  final String? image;
   Invoice({
     this.id,
     required this.amount,
     required this.dateTime,
     required this.customerId,
     required this.userId,
+     this.image,
   });
 }
