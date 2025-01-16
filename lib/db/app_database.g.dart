@@ -104,7 +104,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Customer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL, `userId` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL, `customerId` INTEGER NOT NULL, `userId` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL, `customerId` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `image` TEXT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -189,7 +189,8 @@ class _$UserDao extends UserDao {
     String password,
     int id,
   ) async {
-    await _queryAdapter.queryNoReturn('UPDATE user SET password = ?1 WHERE id = ?2',
+    await _queryAdapter.queryNoReturn(
+        'UPDATE user SET password = ?1 WHERE id = ?2',
         arguments: [password, id]);
   }
 
@@ -345,7 +346,8 @@ class _$InvoiceDao extends InvoiceDao {
                   'amount': item.amount,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'customerId': item.customerId,
-                  'userId': item.userId
+                  'userId': item.userId,
+                  'image': item.image
                 }),
         _invoiceUpdateAdapter = UpdateAdapter(
             database,
@@ -356,7 +358,8 @@ class _$InvoiceDao extends InvoiceDao {
                   'amount': item.amount,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'customerId': item.customerId,
-                  'userId': item.userId
+                  'userId': item.userId,
+                  'image': item.image
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -377,7 +380,8 @@ class _$InvoiceDao extends InvoiceDao {
             amount: row['amount'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as String),
             customerId: row['customerId'] as int,
-            userId: row['userId'] as int),
+            userId: row['userId'] as int,
+            image: row['image'] as String?),
         arguments: [userId]);
   }
 
@@ -389,7 +393,8 @@ class _$InvoiceDao extends InvoiceDao {
             amount: row['amount'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as String),
             customerId: row['customerId'] as int,
-            userId: row['userId'] as int),
+            userId: row['userId'] as int,
+            image: row['image'] as String?),
         arguments: [id]);
   }
 
