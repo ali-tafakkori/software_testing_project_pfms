@@ -35,7 +35,7 @@ class CustomerDialog extends StatefulWidget {
 
 class _CustomerDialogState extends State<CustomerDialog> {
   late final _atfcName = AppTextFieldController(
-    text: widget.customer?.name,
+    text: widget.customer.name,
   );
 
   final _cBalance = CurrencyTextFieldController(
@@ -49,7 +49,7 @@ class _CustomerDialogState extends State<CustomerDialog> {
     controller: _cBalance,
   );
 
-  late bool negativeBalance = (widget.customer?.balance ?? 0) < 0;
+  late bool negativeBalance = (widget.customer.balance) < 0;
 
   bool obscurePass = true;
   bool hasFocus = false;
@@ -92,6 +92,7 @@ class _CustomerDialogState extends State<CustomerDialog> {
               child: Column(
                 children: [
                   AppTextField(
+                    key: const Key("name"),
                     controller: _atfcName,
                     inputType: TextInputType.text,
                     hintText: "Name",
@@ -113,6 +114,7 @@ class _CustomerDialogState extends State<CustomerDialog> {
                     color: Colors.black26,
                   ),
                   AppTextField(
+                    key: const Key("balance"),
                     controller: _atfcBalance,
                     inputType: TextInputType.number,
                     noBorder: true,
@@ -163,6 +165,7 @@ class _CustomerDialogState extends State<CustomerDialog> {
               height: 40,
             ),
             AppButton(
+              key: const Key("save"),
               text: "Save",
               onPressed: onSavePressed,
               color: _atfcName.text.isNotEmpty ? Colors.amber : Colors.blueGrey,
@@ -204,6 +207,7 @@ class _CustomersState extends State<Customers> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        key: const Key("new customer"),
         child: const Icon(Icons.add),
         onPressed: () {
           CustomerDialog.show(
