@@ -422,117 +422,118 @@ class _InvoicesState extends State<Invoices> {
         },
       ),
       body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Center(
-          child: FutureBuilder(
-            future: AppDatabase.instance.invoiceDao.findByUserId(
-              MyApp.of(context)!.userId!,
-            ),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data!.isEmpty) {
-                  return const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.folder_off_rounded,
-                        size: 80,
-                        color: Colors.black45,
-                      ),
-                      Text(
-                        "No Invoice",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w900,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: FutureBuilder(
+              future: AppDatabase.instance.invoiceDao.findByUserId(
+                MyApp.of(context)!.userId!,
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.isEmpty) {
+                    return const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.folder_off_rounded,
+                          size: 80,
                           color: Colors.black45,
                         ),
-                      ),
-                    ],
-                  );
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, i) {
-                      Invoice invoice = snapshot.data![i];
-                      return Card(
-                        child: ListTile(
-                          leading: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.amber,
-                                borderRadius: BorderRadius.circular(
-                                  50,
-                                )),
-                            child: Center(
-                              child: Text(
-                                invoice.id.toString(),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          subtitle: Text(DateFormat("yyyy/MM/dd")
-                              .format(invoice.dateTime)),
-                          title: Text(
-                            NumberFormat.simpleCurrency(decimalDigits: 0)
-                                .format(invoice.amount),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  InvoiceDialog.show(
-                                    context,
-                                    invoice,
-                                  ).then(
-                                    (value) async {
-                                      if (value != null) {
-                                        await AppDatabase.instance.invoiceDao
-                                            .update(value);
-                                        setState(() {});
-                                      }
-                                    },
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.edit_outlined,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () async {
-                                  await AppDatabase.instance.invoiceDao
-                                      .deleteById(invoice.id!);
-                                  setState(() {});
-                                },
-                                icon: const Icon(
-                                  Icons.delete_outline,
-                                ),
-                              ),
-                            ],
+                        Text(
+                          "No Invoice",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.black45,
                           ),
                         ),
-                      );
-                    },
-                  );
+                      ],
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, i) {
+                        Invoice invoice = snapshot.data![i];
+                        return Card(
+                          child: ListTile(
+                            leading: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.amber,
+                                  borderRadius: BorderRadius.circular(
+                                    50,
+                                  )),
+                              child: Center(
+                                child: Text(
+                                  invoice.id.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            subtitle: Text(DateFormat("yyyy/MM/dd")
+                                .format(invoice.dateTime)),
+                            title: Text(
+                              NumberFormat.simpleCurrency(decimalDigits: 0)
+                                  .format(invoice.amount),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    InvoiceDialog.show(
+                                      context,
+                                      invoice,
+                                    ).then(
+                                      (value) async {
+                                        if (value != null) {
+                                          await AppDatabase.instance.invoiceDao
+                                              .update(value);
+                                          setState(() {});
+                                        }
+                                      },
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit_outlined,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: () async {
+                                    await AppDatabase.instance.invoiceDao
+                                        .deleteById(invoice.id!);
+                                    setState(() {});
+                                  },
+                                  icon: const Icon(
+                                    Icons.delete_outline,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
                 }
-              }
-              return LoadingAnimationWidget.inkDrop(
-                color: Colors.amber,
-                size: 48,
-              );
-            },
+                return LoadingAnimationWidget.inkDrop(
+                  color: Colors.amber,
+                  size: 48,
+                );
+              },
+            ),
           ),
         ),
-      )),
+      ),
     );
   }
 }
