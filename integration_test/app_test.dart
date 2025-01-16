@@ -46,13 +46,11 @@ void main() {
           await tester.enterText(
               find.byKey(const Key("username")), testUsername);
           await tester.enterText(find.byKey(const Key("password")), "12345");
+          await tester.tap(find.byKey(const Key("login")));
 
           await tester.pumpAndSettle();
-          await tester.tap(find.byKey(const Key("login")));
-          await tester.pumpAndSettle(const Duration(seconds: 1));
 
           expect(find.text("No Purchase"), findsOneWidget);
-          await tester.pumpAndSettle();
         },
       );
       testWidgets(
