@@ -6,6 +6,7 @@ import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/customer.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
+import 'package:software_testing_project_pfms/router.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
 import 'package:software_testing_project_pfms/widgets/app_text_field.dart';
 
@@ -457,6 +458,14 @@ class _InvoicesState extends State<Invoices> {
                         Invoice invoice = snapshot.data![i];
                         return Card(
                           child: ListTile(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                Routes.invoiceDetails.toString(),
+                                arguments: {
+                                  "id": invoice.id,
+                                },
+                              );
+                            },
                             leading: Container(
                               width: 40,
                               height: 40,
