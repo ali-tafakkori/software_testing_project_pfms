@@ -5,8 +5,12 @@ import 'package:software_testing_project_pfms/main.dart' as app;
 import 'package:software_testing_project_pfms/widgets/app_progress_button.dart';
 
 void main() {
-  var testUsername = DateTime.now().toIso8601String();
+  var testUsername = "U${DateTime.now().toIso8601String()}";
   print("testUsername: $testUsername");
+
+  var testCustomer = "C${DateTime.now().toIso8601String()}";
+  print("testCustomer: $testCustomer");
+
   group(
     "end to end test",
     () {
@@ -51,4 +55,29 @@ void main() {
           await tester.pumpAndSettle();
         },
       );
+      testWidgets(
+        "New Customer",
+            (tester) async {
+          app.main();
+          await tester.pumpAndSettle(const Duration(seconds: 2));
+
+          await tester.tap(find.byKey(const Key("customers")));
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.byKey(const Key("new customer")));
+          await tester.pumpAndSettle();
+
+          await tester.enterText(
+              find.byKey(const Key("name")), testCustomer);
+          await tester.enterText(find.byKey(const Key("balance")), "1000");
+          await tester.tap(find.byKey(const Key("save")));
+          await tester.pumpAndSettle();
+
+          expect(find.text(testCustomer), findsOneWidget);
+          expect(find.text("1000"), findsOneWidget);
+          await tester.pumpAndSettle();
+        },
+      );
+    },
+  );
 }
