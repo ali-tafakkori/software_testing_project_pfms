@@ -52,6 +52,7 @@ class _HomeState extends State<Home> {
               label: 'Invoices',
             ),
             NavigationDestination(
+              key: Key("customers"),
               icon: Icon(CupertinoIcons.person_2),
               label: 'Customers',
             ),
