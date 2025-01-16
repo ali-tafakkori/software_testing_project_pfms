@@ -205,6 +205,7 @@ class _RegisterState extends State<Register> {
                 height: 40,
               ),
               AppProgressButton(
+                key: const Key("register"),
                 text: "Register",
                 onPressed: onRegisterPressed,
                 state: state,
