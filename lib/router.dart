@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:software_testing_project_pfms/home/home.dart';
+import 'package:software_testing_project_pfms/home/invoice_details.dart';
 import 'package:software_testing_project_pfms/home/purchase_details.dart';
 import 'package:software_testing_project_pfms/login/login.dart';
 import 'package:software_testing_project_pfms/login/register.dart';
@@ -10,6 +11,7 @@ enum Routes {
   register,
   home,
   purchaseDetails,
+  invoiceDetails,
 }
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -39,6 +41,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         return PurchaseDetails(
           customerId: map?["customerId"],
           dateTime: map?["dateTime"],
+        );
+      },
+    );
+  }else if (settings.name == Routes.invoiceDetails.toString()) {
+    Map<String, dynamic>? map = settings.arguments as Map<String, dynamic>?;
+    return CupertinoPageRoute(
+      builder: (context) {
+        return InvoiceDetails(
+          id: map?["id"],
         );
       },
     );
