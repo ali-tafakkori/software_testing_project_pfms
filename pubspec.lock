@@ -210,10 +210,10 @@ packages:
     dependency: transitive
     description:
       name: dev_build
-      sha256: "562a5c0db0ea86bd8b9f9d089f3b8fb517257944cf34599af1477e693c33aa33"
+      sha256: "933f14357d4e58da298ce2395e8271728dd90e8760e1c7677ca1d5fa065f2b4a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1+6"
+    version: "1.1.1+7"
   fake_async:
     dependency: transitive
     description:
@@ -821,10 +821,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: cb7f4e9dc1b52b1fa350f7b3d41c662e75fc3d399555fa4e5efcf267e9a4fbb5
+      sha256: a72c68360757d25a528652f9679dac6e5f23bc52af76b74d4687a148d74e06db
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.0"
+    version: "2.6.1"
   sqlparser:
     dependency: transitive
     description:
