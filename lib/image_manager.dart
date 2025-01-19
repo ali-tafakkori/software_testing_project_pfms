@@ -18,18 +18,18 @@ class ImageManager {
     _imageManager.createTemporaryDirectory();
   }
 
-  late String _temporaryDirectoryPath;
+  late String photosDirectoryPath;
 
   void createTemporaryDirectory() async {
     Directory tempDir = await getTemporaryDirectory();
     await tempDir.create();
-    _temporaryDirectoryPath = tempDir.path;
-    await Directory("$_temporaryDirectoryPath/Invoices").create();
+    photosDirectoryPath = "${tempDir.path}/Invoices";
+    await Directory(photosDirectoryPath).create();
   }
 
   Future<String> copyToTempAndDelete(String path) async {
     Directory photos =
-        await Directory("$_temporaryDirectoryPath/Invoices").create();
+        await Directory(photosDirectoryPath).create();
     String extension = Path.extension(path);
     String newPath =
         "${photos.path}/IMAGE_${DateTime.now().microsecondsSinceEpoch}$extension";
