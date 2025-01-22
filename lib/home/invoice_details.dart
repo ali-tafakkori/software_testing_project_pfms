@@ -7,6 +7,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/image_manager.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
+import 'package:software_testing_project_pfms/widgets/app_button.dart';
 
 class InvoiceDetails extends StatefulWidget {
   final int id;
@@ -42,23 +43,33 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
           ),
         );
       } else {
-        child = const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.image_not_supported_outlined,
-              size: 80,
-              color: Colors.black45,
-            ),
-            Text(
-              "No Photo",
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w900,
+        child = Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.image_not_supported_outlined,
+                size: 80,
                 color: Colors.black45,
               ),
-            ),
-          ],
+              const Text(
+                "No Photo",
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.black45,
+                ),
+              ),
+              const SizedBox(
+                height: 14,
+              ),
+              AppButton(
+                width: 150,
+                text: "Select Photo",
+                onPressed: onSelectImagePassed,
+              ),
+            ],
+          ),
         );
       }
       return Scaffold(
@@ -76,15 +87,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                ImageManager.instance.showDialogImagePicker(
-                  context: context,
-                  onDelete: invoice!.image != null ? () {
-                    //TODO:
-                    get();
-                  } : null,
-                );
-              },
+              onPressed: onSelectImagePassed,
               icon: const Icon(
                 Icons.image_outlined,
               ),
@@ -103,6 +106,18 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
           size: 48,
         ),
       ),
+    );
+  }
+
+  void onSelectImagePassed() {
+    ImageManager.instance.showDialogImagePicker(
+      context: context,
+      onDelete: invoice!.image != null
+          ? () {
+              //TODO:
+              get();
+            }
+          : null,
     );
   }
 
