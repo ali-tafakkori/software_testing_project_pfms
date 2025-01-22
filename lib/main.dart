@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
+import 'package:software_testing_project_pfms/image_manager.dart';
 import 'router.dart' as router;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppDatabase.init();
+  ImageManager.init();
   runApp(const MyApp());
 }
 
