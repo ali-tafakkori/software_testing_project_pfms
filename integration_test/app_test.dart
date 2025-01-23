@@ -39,7 +39,7 @@ void main() {
         },
       );
       testWidgets(
-        "Login",
+        "Login, New Customer & New Invoice",
         (tester) async {
           app.main();
           await tester.pumpAndSettle(const Duration(seconds: 2));
@@ -48,12 +48,48 @@ void main() {
           await tester.enterText(find.byKey(const Key("password")), "12345");
           await tester.tap(find.byKey(const Key("login")));
 
+          //await tester.pumpAndSettle(const Duration(seconds: 2));
+          await Future.delayed(const Duration(seconds: 1));
+          expect(find.text("No Purchase"), findsOneWidget);
+
+          //await tester.pumpAndSettle(const Duration(seconds: 2));
+
+          await tester.tap(find.byKey(const Key("customers")));
           await tester.pumpAndSettle();
 
-          expect(find.text("No Purchase"), findsOneWidget);
+          await tester.tap(find.byKey(const Key("new customer")));
+          await tester.pumpAndSettle();
+
+          await tester.enterText(
+              find.byKey(const Key("name")), testCustomer);
+          await tester.enterText(find.byKey(const Key("balance")), "1000");
+          await tester.tap(find.byKey(const Key("save")));
+          await tester.pumpAndSettle();
+
+          expect(find.text(testCustomer), findsOneWidget);
+          await Future.delayed(const Duration(seconds: 1));
+
+          await tester.tap(find.byKey(const Key("invoices")));
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.byKey(const Key("new invoice")));
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.byKey(const Key("invoice customer")));
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.text(testCustomer));
+          await tester.pumpAndSettle();
+
+          await tester.enterText(find.byKey(const Key("amount")), "500");
+          await tester.tap(find.byKey(const Key("save")));
+          await tester.pumpAndSettle();
+
+          expect(find.text(testCustomer), findsOneWidget);
+          await Future.delayed(const Duration(seconds: 1));
         },
       );
-      testWidgets(
+      /*testWidgets(
         "New Customer",
             (tester) async {
           app.main();
@@ -75,7 +111,7 @@ void main() {
           expect(find.text("1000"), findsOneWidget);
           await tester.pumpAndSettle();
         },
-      );
+      );*/
     },
   );
 }
