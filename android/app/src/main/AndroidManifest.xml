@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="software_testing_project_pfms"
+        android:label="سیستم مدیریت مالی شخصی"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
