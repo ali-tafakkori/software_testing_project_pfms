@@ -15,6 +15,12 @@ abstract class InvoiceDao {
   @floor.update
   Future<void> update(Invoice invoice);
 
+  @floor.Query('UPDATE invoice SET photo = :photo WHERE id = :id')
+  Future<void> updatePhotoById(String photo, int id);
+
+  @floor.Query('UPDATE invoice SET photo = NULL WHERE id = :id')
+  Future<void> removePhotoById(int id);
+
   @floor.Query('DELETE FROM invoice WHERE id = :id')
   Future<void> deleteById(int id);
 
