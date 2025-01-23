@@ -48,6 +48,7 @@ class _HomeState extends State<Home> {
               label: 'Dashboard',
             ),
             NavigationDestination(
+              key: Key("invoices"),
               icon: Icon(CupertinoIcons.list_bullet_below_rectangle),
               label: 'Invoices',
             ),
