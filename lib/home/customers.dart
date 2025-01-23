@@ -95,7 +95,7 @@ class _CustomerDialogState extends State<CustomerDialog> {
                     key: const Key("name"),
                     controller: _atfcName,
                     inputType: TextInputType.text,
-                    hintText: "Name",
+                    hintText: "نام",
                     noBorder: true,
                     width: double.infinity,
                     onChanged: (value) {
@@ -118,7 +118,7 @@ class _CustomerDialogState extends State<CustomerDialog> {
                     controller: _atfcBalance,
                     inputType: TextInputType.number,
                     noBorder: true,
-                    hintText: "Balance (Default: Zero)",
+                    hintText: "تراز (پیش‌فرض: صفر)",
                     width: double.infinity,
                     prefixIcon: IconButton(
                       onPressed: () {
@@ -166,7 +166,7 @@ class _CustomerDialogState extends State<CustomerDialog> {
             ),
             AppButton(
               key: const Key("save"),
-              text: "Save",
+              text: "ذخیره",
               onPressed: onSavePressed,
               color: _atfcName.text.isNotEmpty ? Colors.amber : Colors.blueGrey,
             ),
@@ -246,7 +246,7 @@ class _CustomersState extends State<Customers> {
                         color: Colors.black45,
                       ),
                       Text(
-                        "No Customer",
+                        "بدون مشتری",
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w900,
