@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:software_testing_project_pfms/main.dart' as app;
-import 'package:software_testing_project_pfms/widgets/app_progress_button.dart';
 
 void main() {
   var testUsername = "U${DateTime.now().toIso8601String()}";
@@ -86,7 +85,7 @@ void main() {
           await tester.pumpAndSettle();
 
           expect(find.text(testCustomer), findsOneWidget);
-          await Future.delayed(const Duration(seconds: 1));
+          await Future.delayed(const Duration(seconds: 10));
         },
       );
       /*testWidgets(
