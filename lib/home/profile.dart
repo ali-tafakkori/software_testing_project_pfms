@@ -74,7 +74,7 @@ class _NameDialogState extends State<NameDialog> {
                   AppTextField(
                     controller: _atfcName,
                     inputType: TextInputType.text,
-                    hintText: "Name",
+                    hintText: "نام",
                     noBorder: true,
                     width: double.infinity,
                     onChanged: (value) {
@@ -110,7 +110,7 @@ class _NameDialogState extends State<NameDialog> {
               height: 40,
             ),
             AppButton(
-              text: "Save",
+              text: "ذخیره",
               onPressed: onSavePressed,
               color: _atfcName.text.isNotEmpty ? Colors.amber : Colors.blueGrey,
             ),
@@ -127,7 +127,7 @@ class _NameDialogState extends State<NameDialog> {
     });
     if (name.length < 3) {
       hasFocus = true;
-      warning = "Name is required.";
+      warning = "نام الزامی است.";
       _atfcName.requestFocus(context);
     } else {
       Navigator.of(context).pop(name);
@@ -203,7 +203,7 @@ class _UsernameDialogState extends State<UsernameDialog> {
                   AppTextField(
                     controller: _atfcUsername,
                     inputType: TextInputType.text,
-                    hintText: "Username",
+                    hintText: "نام کاربری",
                     noBorder: true,
                     width: double.infinity,
                     onChanged: (value) {
@@ -239,7 +239,7 @@ class _UsernameDialogState extends State<UsernameDialog> {
               height: 40,
             ),
             AppButton(
-              text: "Save",
+              text: "ذخیره",
               onPressed: onSavePressed,
               color: _atfcUsername.text.isNotEmpty
                   ? Colors.amber
@@ -258,7 +258,7 @@ class _UsernameDialogState extends State<UsernameDialog> {
     });
     if (username.length < 3) {
       hasFocus = true;
-      warning = "Username is required.";
+      warning = "نام کاربری الزامی است.";
       _atfcUsername.requestFocus(context);
     } else {
       Navigator.of(context).pop(username);
@@ -330,7 +330,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
                     controller: _atfcPass,
                     inputType: TextInputType.text,
                     noBorder: true,
-                    hintText: "Password",
+                    hintText: "رمز عبور",
                     width: double.infinity,
                     suffixIcon: _atfcPass.text.isNotEmpty
                         ? IconButton(
@@ -367,7 +367,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
                     controller: _atfcRepeatPass,
                     inputType: TextInputType.text,
                     noBorder: true,
-                    hintText: "Repeat Password",
+                    hintText: "تکرار رمز عبور",
                     width: double.infinity,
                     suffixIcon: _atfcRepeatPass.text.isNotEmpty
                         ? IconButton(
@@ -417,7 +417,7 @@ class _PasswordDialogState extends State<PasswordDialog> {
               height: 40,
             ),
             AppButton(
-              text: "Save",
+              text: "ذخیره",
               onPressed: onSavePressed,
               color: _atfcPass.text.isNotEmpty ? Colors.amber : Colors.blueGrey,
             ),
@@ -435,11 +435,11 @@ class _PasswordDialogState extends State<PasswordDialog> {
     });
     if (password.length < 5) {
       hasFocus = true;
-      warning = "Password is required.";
+      warning = "رمز عبور الزامی است.";
       _atfcPass.requestFocus(context);
     } else if (password != repeatPassword) {
       hasFocus = true;
-      warning = "Repeat Password does not match Password.";
+      warning = "تکرار رمز عبور با رمز عبور مطابقت ندارد.";
       _atfcRepeatPass.requestFocus(context);
     } else {
       Navigator.of(context).pop(password);
@@ -530,7 +530,7 @@ class _ProfileState extends State<Profile> {
                                 Icons.abc,
                               ),
                               title: const Text(
-                                "Edit Name",
+                                "ویرایش نام",
                               ),
                               trailing: const Icon(Icons.arrow_forward),
                               onTap: () {
@@ -555,7 +555,7 @@ class _ProfileState extends State<Profile> {
                                 Icons.alternate_email_outlined,
                               ),
                               title: const Text(
-                                "Edit Username",
+                                "ویرایش نام کاربری",
                               ),
                               trailing: const Icon(Icons.arrow_forward),
                               onTap: () {
@@ -581,7 +581,7 @@ class _ProfileState extends State<Profile> {
                                 Icons.vpn_key_outlined,
                               ),
                               title: const Text(
-                                "Change Password",
+                                "تغییر رمز عبور",
                               ),
                               trailing: const Icon(Icons.arrow_forward),
                               onTap: () {
@@ -607,7 +607,7 @@ class _ProfileState extends State<Profile> {
                                 Icons.logout,
                               ),
                               title: const Text(
-                                "Logout",
+                                "خروج",
                               ),
                               trailing: const Icon(Icons.arrow_forward),
                               onTap: () {
