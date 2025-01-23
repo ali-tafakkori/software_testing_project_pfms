@@ -238,6 +238,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
               child: Column(
                 children: [
                   AppTextField(
+                    key: const Key("invoice customer"),
                     controller: _atfcCustomer,
                     inputType: TextInputType.text,
                     hintText: "Customer",
@@ -289,10 +290,11 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                     color: Colors.black26,
                   ),
                   AppTextField(
+                    key: const Key("amount"),
                     controller: _atfcAmount,
                     inputType: TextInputType.number,
                     noBorder: true,
-                    hintText: "Balance (Default: Zero)",
+                    hintText: "Amount (Default: Zero)",
                     width: double.infinity,
                     onChanged: (value) {
                       setState(() {
@@ -327,6 +329,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
               height: 40,
             ),
             AppButton(
+              key: const Key("save"),
               text: "Save",
               onPressed: onSavePressed,
               color: _atfcDateTime.text.isEmpty && _atfcAmount.text.isEmpty
@@ -403,6 +406,7 @@ class _InvoicesState extends State<Invoices> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        key: const Key("new invoice"),
         child: const Icon(Icons.add),
         onPressed: () {
           InvoiceDialog.show(
