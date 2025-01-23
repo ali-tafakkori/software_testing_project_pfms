@@ -66,7 +66,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
                         color: Colors.black45,
                       ),
                       Text(
-                        "No Invoice",
+                        "بدون فاکتور",
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w900,
