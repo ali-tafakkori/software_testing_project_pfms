@@ -241,7 +241,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                     key: const Key("invoice customer"),
                     controller: _atfcCustomer,
                     inputType: TextInputType.text,
-                    hintText: "Customer",
+                    hintText: "مشتری",
                     noBorder: true,
                     width: double.infinity,
                     readOnly: true,
@@ -257,7 +257,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                   AppTextField(
                     controller: _atfcDateTime,
                     inputType: TextInputType.text,
-                    hintText: "Date",
+                    hintText: "تاریخ",
                     noBorder: true,
                     width: double.infinity,
                     readOnly: true,
@@ -294,7 +294,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                     controller: _atfcAmount,
                     inputType: TextInputType.number,
                     noBorder: true,
-                    hintText: "Amount (Default: Zero)",
+                    hintText: "مبلغ (پیش فرض: صفر)",
                     width: double.infinity,
                     onChanged: (value) {
                       setState(() {
@@ -330,7 +330,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
             ),
             AppButton(
               key: const Key("save"),
-              text: "Save",
+              text: "ذخیره",
               onPressed: onSavePressed,
               color: _atfcDateTime.text.isEmpty && _atfcAmount.text.isEmpty
                   ? Colors.blueGrey
@@ -446,7 +446,7 @@ class _InvoicesState extends State<Invoices> {
                           color: Colors.black45,
                         ),
                         Text(
-                          "No Invoice",
+                          "بدون فاکتور",
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w900,
