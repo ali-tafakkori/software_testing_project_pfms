@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
-import 'package:software_testing_project_pfms/models/purchase.dart';
 import 'package:software_testing_project_pfms/router.dart';
 
 class Dashboard extends StatefulWidget {
@@ -89,7 +88,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 8,
                         ),
                         const Text(
-                          "Customer",
+                          "مشتری",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
@@ -149,7 +148,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 8,
                         ),
                         const Text(
-                          "Profit",
+                          "سود",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
@@ -216,7 +215,7 @@ class _DashboardState extends State<Dashboard> {
                           height: 8,
                         ),
                         const Text(
-                          "Debt",
+                          "بدهی",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 17,
@@ -256,7 +255,7 @@ class _DashboardState extends State<Dashboard> {
                                 color: Colors.black45,
                               ),
                               Text(
-                                "No Purchase",
+                                "بدون خرید",
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w900,
