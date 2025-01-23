@@ -39,9 +39,15 @@ class MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
         useMaterial3: true,
-        fontFamily: "byekan"
+        fontFamily: "byekan",
       ),
       debugShowCheckedModeBanner: false,
+      builder: (context, child) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: child!,
+        );
+      },
       onGenerateRoute: router.generateRoute,
     );
   }
