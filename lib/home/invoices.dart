@@ -485,8 +485,32 @@ class _InvoicesState extends State<Invoices> {
                                 ),
                               ),
                             ),
-                            subtitle: Text(DateFormat("yyyy/MM/dd")
-                                .format(invoice.dateTime)),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(DateFormat("yyyy/MM/dd")
+                                    .format(invoice.dateTime)),
+                                FutureBuilder(
+                                  future: AppDatabase.instance.customerDao
+                                      .findById(invoice.customerId),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(
+                                        snapshot.data!.name,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      );
+                                    }
+                                    return LoadingAnimationWidget
+                                        .progressiveDots(
+                                      color: Colors.black,
+                                      size: 24,
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
                             title: Text(
                               NumberFormat.simpleCurrency(decimalDigits: 0)
                                   .format(invoice.amount),
