@@ -53,7 +53,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
                 color: Colors.black45,
               ),
               const Text(
-                "No Photo",
+                "بدون عکس",
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w900,
@@ -65,7 +65,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
               ),
               AppButton(
                 width: 150,
-                text: "Select Photo",
+                text: "اتتخاب عکس",
                 onPressed: onSelectImagePassed,
               ),
             ],
