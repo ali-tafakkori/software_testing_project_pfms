@@ -104,7 +104,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Customer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL, `userId` INTEGER NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL, `customerId` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `image` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL, `customerId` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `photo` TEXT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -347,7 +347,7 @@ class _$InvoiceDao extends InvoiceDao {
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'customerId': item.customerId,
                   'userId': item.userId,
-                  'image': item.image
+                  'photo': item.photo
                 }),
         _invoiceUpdateAdapter = UpdateAdapter(
             database,
@@ -359,7 +359,7 @@ class _$InvoiceDao extends InvoiceDao {
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'customerId': item.customerId,
                   'userId': item.userId,
-                  'image': item.image
+                  'photo': item.photo
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -381,7 +381,7 @@ class _$InvoiceDao extends InvoiceDao {
             dateTime: _dateTimeConverter.decode(row['dateTime'] as String),
             customerId: row['customerId'] as int,
             userId: row['userId'] as int,
-            image: row['image'] as String?),
+            photo: row['photo'] as String?),
         arguments: [userId]);
   }
 
@@ -394,7 +394,24 @@ class _$InvoiceDao extends InvoiceDao {
             dateTime: _dateTimeConverter.decode(row['dateTime'] as String),
             customerId: row['customerId'] as int,
             userId: row['userId'] as int,
-            image: row['image'] as String?),
+            photo: row['photo'] as String?),
+        arguments: [id]);
+  }
+
+  @override
+  Future<void> updatePhotoById(
+    String photo,
+    int id,
+  ) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE invoice SET photo = ?1 WHERE id = ?2',
+        arguments: [photo, id]);
+  }
+
+  @override
+  Future<void> removePhotoById(int id) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE invoice SET photo = NULL WHERE id = ?1',
         arguments: [id]);
   }
 
