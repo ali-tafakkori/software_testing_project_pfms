@@ -45,21 +45,21 @@ class _HomeState extends State<Home> {
           destinations: const <Widget>[
             NavigationDestination(
               icon: Icon(CupertinoIcons.home),
-              label: 'Dashboard',
+              label: 'داشبورد',
             ),
             NavigationDestination(
               key: Key("invoices"),
               icon: Icon(CupertinoIcons.list_bullet_below_rectangle),
-              label: 'Invoices',
+              label: 'فاکتورها',
             ),
             NavigationDestination(
               key: Key("customers"),
               icon: Icon(CupertinoIcons.person_2),
-              label: 'Customers',
+              label: 'مشتریان',
             ),
             NavigationDestination(
               icon: Icon(CupertinoIcons.profile_circled),
-              label: 'Profile',
+              label: 'نمایه',
             ),
           ],
         ),
