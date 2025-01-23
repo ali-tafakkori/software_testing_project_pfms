@@ -220,7 +220,7 @@ class _LoginState extends State<Login> {
               leading: const Icon(CupertinoIcons.info),
               actions: [
                 TextButton(
-                  child: const Text('Dismiss'),
+                  child: const Text('بستن'),
                   onPressed: () {
                     ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
                   },
