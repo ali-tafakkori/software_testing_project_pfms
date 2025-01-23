@@ -34,11 +34,11 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
   Widget build(BuildContext context) {
     if (invoice != null) {
       var child;
-      if (invoice!.image != null) {
+      if (invoice!.photo != null) {
         child = PhotoView(
           imageProvider: FileImage(
             File(
-              ImageManager.instance.photosDirectoryPath + invoice!.image!,
+              "${ImageManager.instance.photosDirectoryPath}/${invoice!.photo!}",
             ),
           ),
         );
@@ -110,14 +110,28 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
   }
 
   void onSelectImagePassed() {
-    ImageManager.instance.showDialogImagePicker(
+    ImageManager.instance
+        .showDialogImagePicker(
       context: context,
-      onDelete: invoice!.image != null
-          ? () {
-              //TODO:
+      onDelete: invoice!.photo != null
+          ? () async {
+              await AppDatabase.instance.invoiceDao.removePhotoById(
+                invoice!.id!,
+              );
               get();
             }
           : null,
+    )
+        .then(
+      (value) async {
+        if (value != null) {
+          await AppDatabase.instance.invoiceDao.updatePhotoById(
+            value,
+            invoice!.id!,
+          );
+          get();
+        }
+      },
     );
   }
 
