@@ -71,7 +71,7 @@ class _RegisterState extends State<Register> {
                       key: const Key("name"),
                       controller: _atfcName,
                       inputType: TextInputType.text,
-                      hintText: "Name",
+                      hintText: "نام",
                       noBorder: true,
                       width: double.infinity,
                       onChanged: (value) {
@@ -93,7 +93,7 @@ class _RegisterState extends State<Register> {
                       key: const Key("username"),
                       controller: _atfcUser,
                       inputType: TextInputType.text,
-                      hintText: "Username",
+                      hintText: "نام کاربری",
                       noBorder: true,
                       width: double.infinity,
                       onChanged: (value) {
@@ -117,7 +117,7 @@ class _RegisterState extends State<Register> {
                       controller: _atfcPass,
                       inputType: TextInputType.text,
                       noBorder: true,
-                      hintText: "Password",
+                      hintText: "رمز عبور",
                       width: double.infinity,
                       suffixIcon: _atfcPass.text.isNotEmpty
                           ? IconButton(
@@ -155,7 +155,7 @@ class _RegisterState extends State<Register> {
                       controller: _atfcRepeatPass,
                       inputType: TextInputType.text,
                       noBorder: true,
-                      hintText: "Repeat Password",
+                      hintText: "تکرار رمز عبور",
                       width: double.infinity,
                       suffixIcon: _atfcRepeatPass.text.isNotEmpty
                           ? IconButton(
@@ -206,7 +206,7 @@ class _RegisterState extends State<Register> {
               ),
               AppProgressButton(
                 key: const Key("register"),
-                text: "Register",
+                text: "ثبت نام",
                 onPressed: onRegisterPressed,
                 state: state,
                 color:
@@ -229,19 +229,19 @@ class _RegisterState extends State<Register> {
     });
     if (name.length < 3) {
       hasFocus = true;
-      warning = "Name is required.";
+      warning = "نام الزامی است.";
       _atfcName.requestFocus(context);
     } else if (username.length < 3) {
       hasFocus = true;
-      warning = "Username is required.";
+      warning = "نام کاربری الزامی است";
       _atfcUser.requestFocus(context);
     } else if (password.length < 5) {
       hasFocus = true;
-      warning = "Password is required.";
+      warning = "رمز عبور الزامی است";
       _atfcPass.requestFocus(context);
     } else if (password != repeatPassword) {
       hasFocus = true;
-      warning = "Repeat Password does not match Password.";
+      warning = "تکرار رمز عبور با رمز عبور مطابقت ندارد.";
       _atfcRepeatPass.requestFocus(context);
     } else {
       setState(() {
@@ -260,7 +260,7 @@ class _RegisterState extends State<Register> {
         }
       } else {
         hasFocus = true;
-        warning = "The Username is already occupied.";
+        warning = "نام کاربری قبلاً استفاده شده است.";
       }
       state = AppProgressButtonState.idle;
     }

@@ -71,7 +71,7 @@ class _LoginState extends State<Login> {
                         key: const Key("username"),
                         controller: _atfcUser,
                         inputType: TextInputType.text,
-                        hintText: "Username",
+                        hintText: "نام کاربری",
                         noBorder: true,
                         width: double.infinity,
                         onChanged: (value) {
@@ -95,7 +95,7 @@ class _LoginState extends State<Login> {
                         controller: _atfcPass,
                         inputType: TextInputType.text,
                         noBorder: true,
-                        hintText: "Password",
+                        hintText: "رمز عبور",
                         width: double.infinity,
                         suffixIcon: _atfcPass.text.isNotEmpty
                             ? IconButton(
@@ -146,7 +146,7 @@ class _LoginState extends State<Login> {
                 ),
                 AppProgressButton(
                   key: const Key("login"),
-                  text: "Login",
+                  text: "ورود",
                   onPressed: onLoginPressed,
                   state: state,
                   color: _atfcUser.text.isNotEmpty
@@ -158,7 +158,7 @@ class _LoginState extends State<Login> {
                 ),
                 AppButton(
                   key: const Key("register"),
-                  text: "Register",
+                  text: "ثبت نام",
                   onPressed: onRegisterPressed,
                   color: Colors.transparent,
                   textColor: Colors.amber,
@@ -179,14 +179,14 @@ class _LoginState extends State<Login> {
     });
     if (username.isEmpty && password.isEmpty) {
       hasFocus = true;
-      warning = "Username and Password are required.";
+      warning = "نام کاربری و رمز عبور الزامی است.";
     } else if (username.length < 3) {
       hasFocus = true;
-      warning = "Username is required.";
+      warning = "نام کاربری الزامی است.";
       _atfcUser.requestFocus(context);
     } else if (password.length < 5) {
       hasFocus = true;
-      warning = "Password is required.";
+      warning = "رمز عبور الزامی است.";
       _atfcPass.requestFocus(context);
     } else {
       setState(() {
@@ -203,7 +203,7 @@ class _LoginState extends State<Login> {
         }
       } else {
         hasFocus = true;
-        warning = "The information entered is incorrect.";
+        warning = "اطلاعات وارد شده نادرست است.";
       }
       state = AppProgressButtonState.idle;
     }
@@ -216,7 +216,7 @@ class _LoginState extends State<Login> {
         if (value == true) {
           if (mounted) {
             ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
-              content: const Text("Now you can log in."),
+              content: const Text("اکنون می توانید وارد شوید."),
               leading: const Icon(CupertinoIcons.info),
               actions: [
                 TextButton(

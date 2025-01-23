@@ -34,10 +34,12 @@ class MyAppState extends State<MyApp> {
       ),
     );
     return MaterialApp(
+      locale: const Locale("fa", "IR"),
       title: "PFMS",
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber),
         useMaterial3: true,
+        fontFamily: "byekan"
       ),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: router.generateRoute,
