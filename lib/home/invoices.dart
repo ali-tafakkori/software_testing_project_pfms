@@ -1,12 +1,14 @@
 import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ir_datetime_picker/ir_datetime_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/customer.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
 import 'package:software_testing_project_pfms/router.dart';
+import 'package:software_testing_project_pfms/utils.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
 import 'package:software_testing_project_pfms/widgets/app_text_field.dart';
 
@@ -171,7 +173,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
   final _atfcCustomer = AppTextFieldController();
   late DateTime dateTime = widget.invoice.dateTime;
   late final _atfcDateTime = AppTextFieldController(
-    text: DateFormat("yyyy/MM/dd").format(dateTime),
+    text: formatCompactDate(dateTime),
   );
   final _cAmount = CurrencyTextFieldController(
     decimalSymbol: ".",
@@ -266,8 +268,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                       onPressed: () {
                         setState(() {
                           dateTime = DateTime.now();
-                          _atfcDateTime.text =
-                              DateFormat("yyyy/MM/dd").format(dateTime);
+                          _atfcDateTime.text = formatCompactDate(dateTime);
                         });
                       },
                       icon: Container(
@@ -360,7 +361,24 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
   }
 
   void onDateTimeTap() {
-    showDatePicker(
+    showIRJalaliDatePickerDialog(
+      context: context,
+      title: "انتخاب تاریخ",
+      visibleTodayButton: true,
+      todayButtonText: "انتخاب امروز",
+      confirmButtonText: "تایید",
+      initialDate: Jalali.fromDateTime(dateTime),
+    ).then(
+      (value) {
+        if (value != null) {
+          setState(() {
+            dateTime = value.toDateTime();
+            _atfcDateTime.text = formatCompactDate(dateTime);
+          });
+        }
+      },
+    );
+    /*showDatePicker(
       context: context,
       firstDate: DateTime(1970),
       lastDate: DateTime(2040),
@@ -374,7 +392,7 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
           });
         }
       },
-    );
+    );*/
   }
 
   void onSavePressed() {
@@ -492,8 +510,7 @@ class _InvoicesState extends State<Invoices> {
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(DateFormat("yyyy/MM/dd")
-                                    .format(invoice.dateTime)),
+                                Text(formatCompactDate(invoice.dateTime)),
                                 FutureBuilder(
                                   future: AppDatabase.instance.customerDao
                                       .findById(invoice.customerId),

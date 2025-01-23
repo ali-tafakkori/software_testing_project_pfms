@@ -4,6 +4,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
+import 'package:software_testing_project_pfms/utils.dart';
 
 class PurchaseDetails extends StatefulWidget {
   final int customerId;
@@ -43,7 +44,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
             },
           ),
           subtitle: Text(
-            DateFormat("yyyy/MM/dd").format(widget.dateTime),
+            formatCompactDate(widget.dateTime),
           ),
         ),
       ),

@@ -492,6 +492,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  ir_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: ir_datetime_picker
+      sha256: eb7f97cc8650ca70bb25e2135d80a7e1fa76963e83079817a50d3b50ae429f01
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.4"
   js:
     dependency: transitive
     description:
@@ -732,6 +740,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.0"
+  shamsi_date:
+    dependency: transitive
+    description:
+      name: shamsi_date
+      sha256: "4614789ed11bfffe5ba0aa157a20f2857ab6328528401766e0d924e453c866bd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   shelf:
     dependency: transitive
     description:

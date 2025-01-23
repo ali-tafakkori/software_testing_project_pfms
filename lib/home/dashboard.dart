@@ -5,6 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/router.dart';
+import 'package:software_testing_project_pfms/utils.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -297,8 +298,7 @@ class _DashboardState extends State<Dashboard> {
                                     },
                                   ),
                                   trailing: Text(
-                                    DateFormat("yyyy/MM/dd")
-                                        .format(purchase.dateTime),
+                                    formatCompactDate(purchase.dateTime),
                                   ),
                                   onTap: () {
                                     Navigator.of(context).pushNamed(

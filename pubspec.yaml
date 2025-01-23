@@ -44,6 +44,7 @@ dependencies:
   path_provider: ^2.1.5
   image_picker: ^1.1.2
   path: ^1.9.0
+  ir_datetime_picker: ^4.1.4
 
 dev_dependencies:
   flutter_test:

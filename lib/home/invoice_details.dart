@@ -7,6 +7,7 @@ import 'package:photo_view/photo_view.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/image_manager.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
+import 'package:software_testing_project_pfms/utils.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
 
 class InvoiceDetails extends StatefulWidget {
@@ -76,7 +77,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           title: ListTile(
-            subtitle: Text(DateFormat("yyyy/MM/dd").format(invoice!.dateTime)),
+            subtitle: Text(formatCompactDate(invoice!.dateTime)),
             title: Text(
               NumberFormat.simpleCurrency(decimalDigits: 0)
                   .format(invoice!.amount),
