@@ -318,6 +318,16 @@ class _$CustomerDao extends CustomerDao {
   }
 
   @override
+  Future<void> chargeBalanceById(
+    int amount,
+    int id,
+  ) async {
+    await _queryAdapter.queryNoReturn(
+        'UPDATE customer SET balance = balance + ?1 WHERE id = ?2',
+        arguments: [amount, id]);
+  }
+
+  @override
   Future<void> deleteById(int id) async {
     await _queryAdapter
         .queryNoReturn('DELETE FROM customer WHERE id = ?1', arguments: [id]);
@@ -485,7 +495,7 @@ class _$ChargeDao extends ChargeDao {
 
   @override
   Future<List<Charge>> findByCustomerId(int customerId) async {
-    return _queryAdapter.queryList('SELECT * FROM charge WHERE customerId = ?1',
+    return _queryAdapter.queryList('SELECT * FROM charge WHERE customerId = ?1 ORDER BY dateTime DESC',
         mapper: (Map<String, Object?> row) => Charge(
             id: row['id'] as int?,
             customerId: row['customerId'] as int,
