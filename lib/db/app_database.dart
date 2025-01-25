@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:floor/floor.dart';
+import 'package:software_testing_project_pfms/db/charge_dao.dart';
 import 'package:software_testing_project_pfms/db/converters/date_time_converter.dart';
 import 'package:software_testing_project_pfms/db/customer_dao.dart';
 import 'package:software_testing_project_pfms/db/invoice_dao.dart';
 import 'package:software_testing_project_pfms/db/user_dao.dart';
 import 'package:software_testing_project_pfms/models/customer.dart';
+import 'package:software_testing_project_pfms/models/charge.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
 import 'package:software_testing_project_pfms/models/purchase.dart';
 import 'package:software_testing_project_pfms/models/user.dart';
@@ -20,6 +22,7 @@ part 'app_database.g.dart';
   User,
   Customer,
   Invoice,
+  Charge,
 ])
 abstract class AppDatabase extends FloorDatabase {
   UserDao get userDao;
@@ -27,6 +30,8 @@ abstract class AppDatabase extends FloorDatabase {
   CustomerDao get customerDao;
 
   InvoiceDao get invoiceDao;
+
+  ChargeDao get chargeDao;
 
   static late AppDatabase _appDatabase;
 
@@ -64,6 +69,7 @@ abstract class AppDatabase extends FloorDatabase {
     int i = row as int;
     return i;
   }
+
   Future<List<Purchase>> findPurchases(int userId) async {
     var result = await database.rawQuery(
       "SELECT c.id AS customerId, DATE(i.dateTime) AS day, SUM(i.amount) AS amount FROM invoice i JOIN customer c ON i.customerId = c.id WHERE c.userId = ?1 GROUP BY customerId, day ORDER BY day, customerId",
@@ -71,12 +77,14 @@ abstract class AppDatabase extends FloorDatabase {
         userId,
       ],
     );
-    return result.map((e) {
-      return Purchase(
-        amount: e["amount"] as int,
-        dateTime: DateTime.parse(e["day"] as String),
-        customerId: e["customerId"] as int,
-      );
-    },).toList();
+    return result.map(
+      (e) {
+        return Purchase(
+          amount: e["amount"] as int,
+          dateTime: DateTime.parse(e["day"] as String),
+          customerId: e["customerId"] as int,
+        );
+      },
+    ).toList();
   }
 }
