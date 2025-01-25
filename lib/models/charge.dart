@@ -6,12 +6,12 @@ class Charge {
   final int? id;
   final int customerId;
   final int amount;
-  final int userId;
+  final DateTime dateTime;
 
   const Charge({
     this.id,
     required this.customerId,
     required this.amount,
-    required this.userId,
+    required this.dateTime,
   });
 }
