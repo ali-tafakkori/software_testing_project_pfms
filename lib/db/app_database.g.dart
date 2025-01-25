@@ -441,10 +441,10 @@ class _$InvoiceDao extends InvoiceDao {
   }
 
   @override
-  Future<int?> countByUserId(int userId) async {
-    return _queryAdapter.query('SELECT COUNT(*) FROM invoice WHERE userId = ?1',
-        mapper: (Map<String, Object?> row) => row.values.first as int,
-        arguments: [userId]);
+  Future<void> deleteByCustomerId(int customerId) async {
+    await _queryAdapter.queryNoReturn(
+        'DELETE FROM invoice WHERE customerId = ?1',
+        arguments: [customerId]);
   }
 
   @override
@@ -495,7 +495,8 @@ class _$ChargeDao extends ChargeDao {
 
   @override
   Future<List<Charge>> findByCustomerId(int customerId) async {
-    return _queryAdapter.queryList('SELECT * FROM charge WHERE customerId = ?1 ORDER BY dateTime DESC',
+    return _queryAdapter.queryList(
+        'SELECT * FROM charge WHERE customerId = ?1 ORDER BY dateTime DESC',
         mapper: (Map<String, Object?> row) => Charge(
             id: row['id'] as int?,
             customerId: row['customerId'] as int,
@@ -522,10 +523,9 @@ class _$ChargeDao extends ChargeDao {
   }
 
   @override
-  Future<int?> countByCustomerId(int customerId) async {
-    return _queryAdapter.query(
-        'SELECT COUNT(*) FROM charge WHERE customerId = ?1',
-        mapper: (Map<String, Object?> row) => row.values.first as int,
+  Future<void> deleteByCustomerId(int customerId) async {
+    await _queryAdapter.queryNoReturn(
+        'DELETE FROM charge WHERE customerId = ?1',
         arguments: [customerId]);
   }
 
