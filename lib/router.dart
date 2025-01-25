@@ -12,6 +12,7 @@ enum Routes {
   home,
   purchaseDetails,
   invoiceDetails,
+  customerCharges,
 }
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -44,7 +45,16 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         );
       },
     );
-  }else if (settings.name == Routes.invoiceDetails.toString()) {
+  } else if (settings.name == Routes.invoiceDetails.toString()) {
+    Map<String, dynamic>? map = settings.arguments as Map<String, dynamic>?;
+    return CupertinoPageRoute(
+      builder: (context) {
+        return InvoiceDetails(
+          id: map?["id"],
+        );
+      },
+    );
+  } else if (settings.name == Routes.customerCharges.toString()) {
     Map<String, dynamic>? map = settings.arguments as Map<String, dynamic>?;
     return CupertinoPageRoute(
       builder: (context) {
