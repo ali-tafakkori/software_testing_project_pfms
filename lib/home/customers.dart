@@ -1,8 +1,11 @@
 import 'package:currency_textfield/currency_textfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
+import 'package:software_testing_project_pfms/home/charge_dialog.dart';
 import 'package:software_testing_project_pfms/main.dart';
+import 'package:software_testing_project_pfms/models/charge.dart';
 import 'package:software_testing_project_pfms/models/customer.dart';
 import 'package:software_testing_project_pfms/router.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
@@ -209,7 +212,9 @@ class _CustomersState extends State<Customers> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         key: const Key("new customer"),
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add_rounded,
+        ),
         onPressed: () {
           CustomerDialog.show(
             context,
@@ -271,9 +276,7 @@ class _CustomersState extends State<Customers> {
                               },
                             ).then(
                               (value) {
-                                if (value != null) {
-                                  setState(() {});
-                                }
+                                setState(() {});
                               },
                             );
                           },
@@ -314,6 +317,30 @@ class _CustomersState extends State<Customers> {
                                 },
                                 icon: const Icon(
                                   Icons.edit_outlined,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  ChargeDialog.show(
+                                    context,
+                                    customer.id!,
+                                  ).then(
+                                    (value) async {
+                                      if (value != null) {
+                                        await AppDatabase.instance.chargeDao
+                                            .insert(value);
+                                        await AppDatabase.instance.customerDao
+                                            .chargeBalanceById(
+                                          value.amount,
+                                          customer.id!,
+                                        );
+                                        setState(() {});
+                                      }
+                                    },
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.add_circle_outline_rounded,
                                 ),
                               ),
                               IconButton(
