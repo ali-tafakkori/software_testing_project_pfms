@@ -227,7 +227,16 @@ class _CustomersState extends State<Customers> {
           ).then(
             (value) async {
               if (value != null) {
-                await AppDatabase.instance.customerDao.insert(value);
+                int id = await AppDatabase.instance.customerDao.insert(value);
+                if (id >= 0 && value.balance != 0) {
+                  await AppDatabase.instance.chargeDao.insert(
+                    Charge(
+                      customerId: id,
+                      amount: value.balance,
+                      dateTime: DateTime.now(),
+                    ),
+                  );
+                }
                 setState(() {});
               }
             },
