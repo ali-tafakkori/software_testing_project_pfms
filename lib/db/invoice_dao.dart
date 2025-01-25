@@ -24,6 +24,6 @@ abstract class InvoiceDao {
   @floor.Query('DELETE FROM invoice WHERE id = :id')
   Future<void> deleteById(int id);
 
-  @floor.Query('SELECT COUNT(*) FROM invoice WHERE userId = :userId')
-  Future<int?> countByUserId(int userId);
+  @floor.Query('DELETE FROM invoice WHERE customerId = :customerId')
+  Future<void> deleteByCustomerId(int customerId);
 }
