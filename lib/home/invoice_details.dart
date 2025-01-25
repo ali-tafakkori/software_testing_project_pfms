@@ -34,7 +34,7 @@ class _InvoiceDetailsState extends State<InvoiceDetails> {
   @override
   Widget build(BuildContext context) {
     if (invoice != null) {
-      var child;
+      Widget child;
       if (invoice!.photo != null) {
         child = PhotoView(
           imageProvider: FileImage(

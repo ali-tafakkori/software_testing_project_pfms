@@ -5,10 +5,10 @@ import 'package:software_testing_project_pfms/main.dart' as app;
 
 void main() {
   var testUsername = "U${DateTime.now().toIso8601String()}";
-  print("testUsername: $testUsername");
+  //print("testUsername: $testUsername");
 
   var testCustomer = "C${DateTime.now().toIso8601String()}";
-  print("testCustomer: $testCustomer");
+  //print("testCustomer: $testCustomer");
 
   group(
     "end to end test",

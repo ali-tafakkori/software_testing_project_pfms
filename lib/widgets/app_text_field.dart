@@ -10,7 +10,6 @@ class AppTextFieldController {
     TextEditingController? controller,
     String? text,
     String? debugLabel,
-    FocusOnKeyCallback? onKey,
     bool skipTraversal = false,
     bool canRequestFocus = true,
     bool descendantsAreFocusable = true,
@@ -18,7 +17,6 @@ class AppTextFieldController {
     this.controller = controller ?? TextEditingController(text: text);
     focusNode = FocusNode(
       debugLabel: debugLabel,
-      onKey: onKey,
       skipTraversal: skipTraversal,
       canRequestFocus: canRequestFocus,
       descendantsAreFocusable: descendantsAreFocusable,
@@ -106,7 +104,7 @@ class AppTextField extends StatefulWidget {
   });
 
   @override
-  _AppTextFieldState createState() => _AppTextFieldState();
+  State<AppTextField> createState() => _AppTextFieldState();
 }
 
 class _AppTextFieldState extends State<AppTextField> {

@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as Path;
+import 'package:path/path.dart' as path_pack;
 import 'package:image_picker/image_picker.dart';
 
 class ImageManager {
@@ -30,7 +30,7 @@ class ImageManager {
   Future<String> copyToTempAndDelete(String path) async {
     Directory photos =
         await Directory(photosDirectoryPath).create();
-    String extension = Path.extension(path);
+    String extension = path_pack.extension(path);
     String newPath =
         "${photos.path}/IMAGE_${DateTime.now().microsecondsSinceEpoch}$extension";
 
@@ -38,7 +38,7 @@ class ImageManager {
 
     await file.copy(newPath);
     await file.delete();
-    return Path.basename(newPath);
+    return path_pack.basename(newPath);
   }
 
   Future<String?> showDialogImagePicker({
