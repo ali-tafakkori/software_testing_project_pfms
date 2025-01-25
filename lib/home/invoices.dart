@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:ir_datetime_picker/ir_datetime_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
+import 'package:software_testing_project_pfms/image_manager.dart';
 import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/customer.dart';
 import 'package:software_testing_project_pfms/models/invoice.dart';
@@ -532,7 +533,8 @@ class _InvoicesState extends State<Invoices> {
                                               value.amount - invoice.amount;
                                           await AppDatabase.instance.customerDao
                                               .chargeBalanceById(
-                                            ((diff + (diff * 0.1)) * -1).toInt(),
+                                            ((diff + (diff * 0.1)) * -1)
+                                                .toInt(),
                                             value.customerId,
                                           );
                                           setState(() {});
@@ -550,9 +552,14 @@ class _InvoicesState extends State<Invoices> {
                                         .deleteById(invoice.id!);
                                     await AppDatabase.instance.customerDao
                                         .chargeBalanceById(
-                                      (invoice.amount + (invoice.amount * 0.1)).toInt(),
+                                      (invoice.amount + (invoice.amount * 0.1))
+                                          .toInt(),
                                       invoice.customerId,
                                     );
+                                    if (invoice.photo != null) {
+                                      ImageManager.instance
+                                          .deleteImage(invoice.photo!);
+                                    }
                                     setState(() {});
                                   },
                                   icon: const Icon(
