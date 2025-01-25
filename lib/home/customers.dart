@@ -113,40 +113,43 @@ class _CustomerDialogState extends State<CustomerDialog> {
                       });
                     },
                   ),
-                  Container(
-                    height: 1,
-                    color: Colors.black26,
-                  ),
-                  AppTextField(
-                    key: const Key("balance"),
-                    controller: _atfcBalance,
-                    inputType: TextInputType.number,
-                    noBorder: true,
-                    hintText: "تراز (پیش‌فرض: صفر)",
-                    width: double.infinity,
-                    prefixIcon: IconButton(
-                      onPressed: () {
+                  if(widget.customer.id == null)
+                  ...[
+                    Container(
+                      height: 1,
+                      color: Colors.black26,
+                    ),
+                    AppTextField(
+                      key: const Key("balance"),
+                      controller: _atfcBalance,
+                      inputType: TextInputType.number,
+                      noBorder: true,
+                      hintText: "تراز (پیش‌فرض: صفر)",
+                      width: double.infinity,
+                      prefixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            negativeBalance = !negativeBalance;
+                          });
+                        },
+                        icon: Icon(
+                          negativeBalance
+                              ? Icons.remove_circle_outline_rounded
+                              : Icons.add_circle_outline_rounded,
+                        ),
+                      ),
+                      onChanged: (value) {
                         setState(() {
-                          negativeBalance = !negativeBalance;
+                          warning = null;
                         });
                       },
-                      icon: Icon(
-                        negativeBalance
-                            ? Icons.remove_circle_outline_rounded
-                            : Icons.add_circle_outline_rounded,
-                      ),
+                      onTap: () {
+                        setState(() {
+                          hasFocus = true;
+                        });
+                      },
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        warning = null;
-                      });
-                    },
-                    onTap: () {
-                      setState(() {
-                        hasFocus = true;
-                      });
-                    },
-                  ),
+                  ],
                 ],
               ),
             ),
