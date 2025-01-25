@@ -70,7 +70,7 @@ class _CustomerListDialogState extends State<CustomerListDialog> {
                       color: Colors.black45,
                     ),
                     Text(
-                      "No Customer",
+                      "بدون مشتری",
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w900,
@@ -411,7 +411,7 @@ class _InvoicesState extends State<Invoices> {
               if (value != null) {
                 await AppDatabase.instance.invoiceDao.insert(value);
                 await AppDatabase.instance.customerDao.chargeBalanceById(
-                  value.amount * -1,
+                  ((value.amount + (value.amount * 0.1)) * -1).toInt(),
                   value.customerId,
                 );
                 setState(() {});
@@ -528,10 +528,11 @@ class _InvoicesState extends State<Invoices> {
                                         if (value != null) {
                                           await AppDatabase.instance.invoiceDao
                                               .update(value);
+                                          int diff =
+                                              value.amount - invoice.amount;
                                           await AppDatabase.instance.customerDao
                                               .chargeBalanceById(
-                                            (value.amount - invoice.amount) *
-                                                -1,
+                                            ((diff + (diff * 0.1)) * -1).toInt(),
                                             value.customerId,
                                           );
                                           setState(() {});
@@ -547,6 +548,11 @@ class _InvoicesState extends State<Invoices> {
                                   onPressed: () async {
                                     await AppDatabase.instance.invoiceDao
                                         .deleteById(invoice.id!);
+                                    await AppDatabase.instance.customerDao
+                                        .chargeBalanceById(
+                                      (invoice.amount + (invoice.amount * 0.1)).toInt(),
+                                      invoice.customerId,
+                                    );
                                     setState(() {});
                                   },
                                   icon: const Icon(
