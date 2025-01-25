@@ -61,13 +61,13 @@ abstract class AppDatabase extends FloorDatabase {
   Future<int> debt(int userId) async {
     var result = await database.rawQuery(
       //"SELECT (IFNULL((SELECT SUM(amount) FROM charge WHERE userId = ?1), 0) - IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0)) AS difference",
-      "SELECT (IFNULL((SELECT SUM(ch.amount) FROM charge ch JOIN customer c ON ch.customerId = c.id WHERE c.userId = ?1), 0) - IFNULL((SELECT SUM(amount) FROM invoice WHERE userId = ?1), 0)) AS difference",
+      "SELECT (IFNULL((SELECT SUM(ch.amount) FROM charge ch JOIN customer c ON ch.customerId = c.id WHERE c.userId = ?1), 0) - IFNULL(((SELECT SUM(amount) FROM invoice WHERE userId = ?1) * 1.1), 0) ) AS difference",
       [
         userId,
       ],
     );
     var row = result.first.values.first ?? 0;
-    int i = row as int;
+    int i = (row as double).toInt();
     return i;
   }
 
