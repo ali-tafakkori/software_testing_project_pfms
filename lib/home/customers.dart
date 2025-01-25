@@ -113,8 +113,7 @@ class _CustomerDialogState extends State<CustomerDialog> {
                       });
                     },
                   ),
-                  if(widget.customer.id == null)
-                  ...[
+                  if (widget.customer.id == null) ...[
                     Container(
                       height: 1,
                       color: Colors.black26,
@@ -350,6 +349,10 @@ class _CustomersState extends State<Customers> {
                                 onPressed: () async {
                                   await AppDatabase.instance.customerDao
                                       .deleteById(customer.id!);
+                                  await AppDatabase.instance.chargeDao
+                                      .deleteByCustomerId(customer.id!);
+                                  await AppDatabase.instance.invoiceDao
+                                      .deleteByCustomerId(customer.id!);
                                   setState(() {});
                                 },
                                 icon: const Icon(
