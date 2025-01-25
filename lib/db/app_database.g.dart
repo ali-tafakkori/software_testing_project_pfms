@@ -108,7 +108,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL, `customerId` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `photo` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Charge` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `customerId` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `userId` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Charge` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `customerId` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -460,7 +460,7 @@ class _$ChargeDao extends ChargeDao {
                   'id': item.id,
                   'customerId': item.customerId,
                   'amount': item.amount,
-                  'userId': item.userId
+                  'dateTime': _dateTimeConverter.encode(item.dateTime)
                 }),
         _chargeUpdateAdapter = UpdateAdapter(
             database,
@@ -470,7 +470,7 @@ class _$ChargeDao extends ChargeDao {
                   'id': item.id,
                   'customerId': item.customerId,
                   'amount': item.amount,
-                  'userId': item.userId
+                  'dateTime': _dateTimeConverter.encode(item.dateTime)
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -490,7 +490,7 @@ class _$ChargeDao extends ChargeDao {
             id: row['id'] as int?,
             customerId: row['customerId'] as int,
             amount: row['amount'] as int,
-            userId: row['userId'] as int),
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as String)),
         arguments: [customerId]);
   }
 
@@ -501,7 +501,7 @@ class _$ChargeDao extends ChargeDao {
             id: row['id'] as int?,
             customerId: row['customerId'] as int,
             amount: row['amount'] as int,
-            userId: row['userId'] as int),
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as String)),
         arguments: [id]);
   }
 
