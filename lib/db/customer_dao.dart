@@ -15,6 +15,9 @@ abstract class CustomerDao {
   @floor.update
   Future<void> update(Customer customer);
 
+  @floor.Query('UPDATE customer SET balance = balance + :amount WHERE id = :id')
+  Future<void> chargeBalanceById(int amount, int id);
+
   @floor.Query('DELETE FROM customer WHERE id = :id')
   Future<void> deleteById(int id);
 
