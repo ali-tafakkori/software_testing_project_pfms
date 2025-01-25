@@ -28,7 +28,7 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
       appBar: AppBar(
         title: ListTile(
           title: FutureBuilder(
-            future: AppDatabase.instance.userDao.findById(
+            future: AppDatabase.instance.customerDao.findById(
               widget.customerId,
             ),
             builder: (context, snapshot) {
