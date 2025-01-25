@@ -1,28 +1,42 @@
 import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:ir_datetime_picker/ir_datetime_picker.dart';
+import 'package:software_testing_project_pfms/models/charge.dart';
+import 'package:software_testing_project_pfms/utils.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
-
-import '../widgets/app_text_field.dart';
+import 'package:software_testing_project_pfms/widgets/app_text_field.dart';
 
 class ChargeDialog extends StatefulWidget {
-  const ChargeDialog({super.key});
+  final int customerId;
+
+  const ChargeDialog({
+    super.key,
+    required this.customerId,
+  });
 
   @override
   State<ChargeDialog> createState() => _ChargeDialogState();
 
-  static Future<int?> show(BuildContext context) {
-    return showGeneralDialog<int?>(
+  static Future<Charge?> show(BuildContext context, int customerId) {
+    return showGeneralDialog<Charge?>(
       context: context,
       barrierDismissible: true,
       barrierLabel: "",
       pageBuilder: (context, animation, secondaryAnimation) {
-        return const ChargeDialog();
+        return ChargeDialog(
+          customerId: customerId,
+        );
       },
     );
   }
 }
 
 class _ChargeDialogState extends State<ChargeDialog> {
+  DateTime dateTime = DateTime.now();
+  late final _atfcDateTime = AppTextFieldController(
+    text: formatCompactDate(dateTime),
+  );
+
   final _cAmount = CurrencyTextFieldController(
     decimalSymbol: ".",
     thousandSymbol: ",",
@@ -68,6 +82,40 @@ class _ChargeDialogState extends State<ChargeDialog> {
               ),
               child: Column(
                 children: [
+                  AppTextField(
+                    controller: _atfcDateTime,
+                    inputType: TextInputType.text,
+                    hintText: "تاریخ",
+                    noBorder: true,
+                    width: double.infinity,
+                    readOnly: true,
+                    onTap: onDateTimeTap,
+                    prefixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          dateTime = DateTime.now();
+                          _atfcDateTime.text = formatCompactDate(dateTime);
+                        });
+                      },
+                      icon: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1.2,
+                          ),
+                        ),
+                        child: const Text("Now"),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 1,
+                    color: Colors.black26,
+                  ),
                   AppTextField(
                     controller: _atfcAmount,
                     inputType: TextInputType.number,
@@ -120,7 +168,7 @@ class _ChargeDialogState extends State<ChargeDialog> {
             ),
             AppButton(
               text: "شارژ",
-              onPressed: onSavePressed,
+              onPressed: onChargePressed,
               color: _cAmount.intValue > 0 ? Colors.amber : Colors.blueGrey,
             ),
           ],
@@ -129,16 +177,43 @@ class _ChargeDialogState extends State<ChargeDialog> {
     );
   }
 
-  void onSavePressed() {
+  void onDateTimeTap() {
+    showIRJalaliDatePickerDialog(
+      context: context,
+      title: "انتخاب تاریخ",
+      visibleTodayButton: true,
+      todayButtonText: "انتخاب امروز",
+      confirmButtonText: "تایید",
+      initialDate: Jalali.fromDateTime(dateTime),
+    ).then(
+      (value) {
+        if (value != null) {
+          setState(() {
+            dateTime = value.toDateTime();
+            _atfcDateTime.text = formatCompactDate(dateTime);
+          });
+        }
+      },
+    );
+  }
+
+  void onChargePressed() {
     int intValue = _cAmount.intValue;
     if (intValue <= 0) {
+      setState(() {
+        warning = "مبلغ الزامی است.";
+      });
       return;
     }
     if (negative) {
       intValue *= -1;
     }
     Navigator.of(context).pop(
-      intValue,
+      Charge(
+        customerId: widget.customerId,
+        amount: intValue,
+        dateTime: dateTime,
+      ),
     );
   }
 }
