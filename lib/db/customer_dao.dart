@@ -10,7 +10,7 @@ abstract class CustomerDao {
   Future<Customer?> findById(int id);
 
   @floor.insert
-  Future<void> insert(Customer customer);
+  Future<int> insert(Customer customer);
 
   @floor.update
   Future<void> update(Customer customer);
