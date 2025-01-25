@@ -3,7 +3,7 @@ import 'package:software_testing_project_pfms/models/charge.dart';
 
 @floor.dao
 abstract class ChargeDao {
-  @floor.Query('SELECT * FROM charge WHERE customerId = :customerId')
+  @floor.Query('SELECT * FROM charge WHERE customerId = :customerId ORDER BY dateTime DESC')
   Future<List<Charge>> findByCustomerId(int customerId);
 
   @floor.Query('SELECT * FROM charge WHERE id = :id')
