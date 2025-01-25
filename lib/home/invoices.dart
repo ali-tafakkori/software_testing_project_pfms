@@ -311,21 +311,6 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
                 ],
               ),
             ),
-            if (warning != null)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 8,
-                ),
-                child: Text(
-                  warning.toString(),
-                  style: const TextStyle(
-                    color: Colors.redAccent,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
             const SizedBox(
               height: 40,
             ),
@@ -378,21 +363,6 @@ class _InvoiceDialogState extends State<InvoiceDialog> {
         }
       },
     );
-    /*showDatePicker(
-      context: context,
-      firstDate: DateTime(1970),
-      lastDate: DateTime(2040),
-      initialDate: dateTime,
-    ).then(
-      (value) {
-        if (value != null) {
-          setState(() {
-            dateTime = value;
-            _atfcDateTime.text = DateFormat("yyyy/MM/dd").format(dateTime);
-          });
-        }
-      },
-    );*/
   }
 
   void onSavePressed() {
@@ -425,7 +395,9 @@ class _InvoicesState extends State<Invoices> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         key: const Key("new invoice"),
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add_rounded,
+        ),
         onPressed: () {
           InvoiceDialog.show(
               context,
@@ -438,6 +410,10 @@ class _InvoicesState extends State<Invoices> {
             (value) async {
               if (value != null) {
                 await AppDatabase.instance.invoiceDao.insert(value);
+                await AppDatabase.instance.customerDao.chargeBalanceById(
+                  value.amount * -1,
+                  value.customerId,
+                );
                 setState(() {});
               }
             },
@@ -552,6 +528,12 @@ class _InvoicesState extends State<Invoices> {
                                         if (value != null) {
                                           await AppDatabase.instance.invoiceDao
                                               .update(value);
+                                          await AppDatabase.instance.customerDao
+                                              .chargeBalanceById(
+                                            (value.amount - invoice.amount) *
+                                                -1,
+                                            value.customerId,
+                                          );
                                           setState(() {});
                                         }
                                       },
