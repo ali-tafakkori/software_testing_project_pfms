@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' hide TextDirection;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
@@ -29,9 +29,12 @@ class _DashboardState extends State<Dashboard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                LoadingAnimationWidget.halfTriangleDot(
-                  color: Colors.white54,
-                  size: 80,
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: LoadingAnimationWidget.halfTriangleDot(
+                    color: Colors.white54,
+                    size: 80,
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).padding.top + 24,
