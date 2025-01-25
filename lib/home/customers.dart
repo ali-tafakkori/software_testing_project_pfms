@@ -4,6 +4,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:software_testing_project_pfms/db/app_database.dart';
 import 'package:software_testing_project_pfms/main.dart';
 import 'package:software_testing_project_pfms/models/customer.dart';
+import 'package:software_testing_project_pfms/router.dart';
 import 'package:software_testing_project_pfms/widgets/app_button.dart';
 import 'package:software_testing_project_pfms/widgets/app_text_field.dart';
 import 'package:intl/intl.dart';
@@ -262,6 +263,20 @@ class _CustomersState extends State<Customers> {
                       Customer customer = snapshot.data![i];
                       return Card(
                         child: ListTile(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              Routes.customerCharges.toString(),
+                              arguments: {
+                                "id": customer.id,
+                              },
+                            ).then(
+                              (value) {
+                                if (value != null) {
+                                  setState(() {});
+                                }
+                              },
+                            );
+                          },
                           leading: const Icon(
                             Icons.person,
                             color: Colors.amber,
