@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:software_testing_project_pfms/home/customer_charges.dart';
 import 'package:software_testing_project_pfms/home/home.dart';
 import 'package:software_testing_project_pfms/home/invoice_details.dart';
 import 'package:software_testing_project_pfms/home/purchase_details.dart';
@@ -58,7 +59,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     Map<String, dynamic>? map = settings.arguments as Map<String, dynamic>?;
     return CupertinoPageRoute(
       builder: (context) {
-        return InvoiceDetails(
+        return CustomerCharges(
           id: map?["id"],
         );
       },
