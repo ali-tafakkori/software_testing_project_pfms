@@ -18,6 +18,6 @@ abstract class ChargeDao {
   @floor.Query('DELETE FROM charge WHERE id = :id')
   Future<void> deleteById(int id);
 
-  @floor.Query('SELECT COUNT(*) FROM charge WHERE customerId = :customerId')
-  Future<int?> countByCustomerId(int customerId);
+  @floor.Query('DELETE FROM charge WHERE customerId = :customerId')
+  Future<void> deleteByCustomerId(int customerId);
 }
