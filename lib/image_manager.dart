@@ -28,11 +28,12 @@ class ImageManager {
   }
 
   Future<String> copyToTempAndDelete(String path) async {
-    Directory photos =
-        await Directory(photosDirectoryPath).create();
+    Directory photos = await Directory(photosDirectoryPath).create();
     String extension = path_pack.extension(path);
     String newPath =
-        "${photos.path}/IMAGE_${DateTime.now().microsecondsSinceEpoch}$extension";
+        "${photos.path}/IMAGE_${DateTime
+        .now()
+        .microsecondsSinceEpoch}$extension";
 
     File file = File(path);
 
@@ -97,5 +98,9 @@ class ImageManager {
       }
     });
     return completer.future;
+  }
+
+  void deleteImage(String photo) {
+    File("$photosDirectoryPath/$photo").deleteSync();
   }
 }
