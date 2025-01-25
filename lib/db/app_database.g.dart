@@ -78,6 +78,8 @@ class _$AppDatabase extends AppDatabase {
 
   InvoiceDao? _invoiceDaoInstance;
 
+  ChargeDao? _chargeDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -105,6 +107,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `Customer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `balance` INTEGER NOT NULL, `userId` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `Invoice` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `amount` INTEGER NOT NULL, `dateTime` TEXT NOT NULL, `customerId` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `photo` TEXT)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `Charge` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `customerId` INTEGER NOT NULL, `amount` INTEGER NOT NULL, `userId` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -125,6 +129,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   InvoiceDao get invoiceDao {
     return _invoiceDaoInstance ??= _$InvoiceDao(database, changeListener);
+  }
+
+  @override
+  ChargeDao get chargeDao {
+    return _chargeDaoInstance ??= _$ChargeDao(database, changeListener);
   }
 }
 
@@ -436,6 +445,88 @@ class _$InvoiceDao extends InvoiceDao {
   @override
   Future<void> update(Invoice invoice) async {
     await _invoiceUpdateAdapter.update(invoice, OnConflictStrategy.abort);
+  }
+}
+
+class _$ChargeDao extends ChargeDao {
+  _$ChargeDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database),
+        _chargeInsertionAdapter = InsertionAdapter(
+            database,
+            'Charge',
+            (Charge item) => <String, Object?>{
+                  'id': item.id,
+                  'customerId': item.customerId,
+                  'amount': item.amount,
+                  'userId': item.userId
+                }),
+        _chargeUpdateAdapter = UpdateAdapter(
+            database,
+            'Charge',
+            ['id'],
+            (Charge item) => <String, Object?>{
+                  'id': item.id,
+                  'customerId': item.customerId,
+                  'amount': item.amount,
+                  'userId': item.userId
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Charge> _chargeInsertionAdapter;
+
+  final UpdateAdapter<Charge> _chargeUpdateAdapter;
+
+  @override
+  Future<List<Charge>> findByCustomerId(int customerId) async {
+    return _queryAdapter.queryList('SELECT * FROM charge WHERE customerId = ?1',
+        mapper: (Map<String, Object?> row) => Charge(
+            id: row['id'] as int?,
+            customerId: row['customerId'] as int,
+            amount: row['amount'] as int,
+            userId: row['userId'] as int),
+        arguments: [customerId]);
+  }
+
+  @override
+  Future<Charge?> findById(int id) async {
+    return _queryAdapter.query('SELECT * FROM charge WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => Charge(
+            id: row['id'] as int?,
+            customerId: row['customerId'] as int,
+            amount: row['amount'] as int,
+            userId: row['userId'] as int),
+        arguments: [id]);
+  }
+
+  @override
+  Future<void> deleteById(int id) async {
+    await _queryAdapter
+        .queryNoReturn('DELETE FROM charge WHERE id = ?1', arguments: [id]);
+  }
+
+  @override
+  Future<int?> countByCustomerId(int customerId) async {
+    return _queryAdapter.query(
+        'SELECT COUNT(*) FROM charge WHERE customerId = ?1',
+        mapper: (Map<String, Object?> row) => row.values.first as int,
+        arguments: [customerId]);
+  }
+
+  @override
+  Future<void> insert(Charge charge) async {
+    await _chargeInsertionAdapter.insert(charge, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> update(Charge charge) async {
+    await _chargeUpdateAdapter.update(charge, OnConflictStrategy.abort);
   }
 }
 
