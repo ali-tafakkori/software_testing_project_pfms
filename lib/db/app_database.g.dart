@@ -406,6 +406,17 @@ class _$InvoiceDao extends InvoiceDao {
   }
 
   @override
+  Future<List<Invoice>> findByCustomerIdAndDateTime(
+    int customerId,
+    DateTime dateTime,
+  ) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM invoice WHERE customerId = ?1 AND DATE(dateTime) = DATE(?2)',
+        mapper: (Map<String, Object?> row) => Invoice(id: row['id'] as int?, amount: row['amount'] as int, dateTime: _dateTimeConverter.decode(row['dateTime'] as String), customerId: row['customerId'] as int, userId: row['userId'] as int, photo: row['photo'] as String?),
+        arguments: [customerId, _dateTimeConverter.encode(dateTime)]);
+  }
+
+  @override
   Future<Invoice?> findById(int id) async {
     return _queryAdapter.query('SELECT * FROM invoice WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Invoice(
