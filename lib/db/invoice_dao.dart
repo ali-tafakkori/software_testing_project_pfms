@@ -6,6 +6,12 @@ abstract class InvoiceDao {
   @floor.Query('SELECT * FROM invoice WHERE userId = :userId')
   Future<List<Invoice>> findByUserId(int userId);
 
+  @floor.Query('SELECT * FROM invoice WHERE customerId = :customerId AND DATE(dateTime) = DATE(:dateTime)')
+  Future<List<Invoice>> findByCustomerIdAndDateTime(
+    int customerId,
+    DateTime dateTime,
+  );
+
   @floor.Query('SELECT * FROM invoice WHERE id = :id')
   Future<Invoice?> findById(int id);
 
