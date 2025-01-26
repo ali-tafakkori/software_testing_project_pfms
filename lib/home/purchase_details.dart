@@ -52,8 +52,9 @@ class _PurchaseDetailsState extends State<PurchaseDetails> {
         padding: const EdgeInsets.all(16),
         child: Center(
           child: FutureBuilder(
-            future: AppDatabase.instance.invoiceDao.findByUserId(
-              MyApp.of(context)!.userId!,
+            future: AppDatabase.instance.invoiceDao.findByCustomerIdAndDateTime(
+              widget.customerId,
+              widget.dateTime,
             ),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
